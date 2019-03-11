@@ -14,7 +14,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+
+import static com.badlogic.gdx.utils.Align.right;
 
 public class MainMenu extends ScreenAdapter {
 
@@ -48,12 +51,12 @@ public class MainMenu extends ScreenAdapter {
         stage = new Stage(new FitViewport(WORLD_WIDTH, WORLD_HEIGHT));
         Gdx.input.setInputProcessor(stage);
 
-        backgroundTexture =new Texture(Gdx.files.internal(""));
+        backgroundTexture =new Texture(Gdx.files.internal("Menu.png"));
         Image background = new Image(backgroundTexture);
         stage.addActor(background);
 
-        playTexture = new Texture(Gdx.files.internal(""));
-        playPressed = new Texture(Gdx.files.internal(""));
+        playTexture = new Texture(Gdx.files.internal("Jugar.png"));
+        playPressed = new Texture(Gdx.files.internal("JugarLuz.png"));
         ImageButton play = new ImageButton(new TextureRegionDrawable(new TextureRegion(playTexture)), new TextureRegionDrawable(new TextureRegion(playPressed)));
         play.addListener(new ActorGestureListener() {
             @Override
@@ -64,8 +67,9 @@ public class MainMenu extends ScreenAdapter {
             }
         });
 
-        charactersTexture = new Texture(Gdx.files.internal(""));
-        charactersPressed = new Texture(Gdx.files.internal(""));
+        charactersTexture = new Texture(Gdx.files.internal("Personajes.png"));
+        charactersPressed = new Texture(Gdx.files.internal("PerLuz.png"));
+
         ImageButton characters = new ImageButton(new TextureRegionDrawable(new TextureRegion(charactersTexture)), new TextureRegionDrawable(new TextureRegion(charactersPressed)));
         characters.addListener(new ActorGestureListener() {
             @Override
@@ -76,8 +80,8 @@ public class MainMenu extends ScreenAdapter {
             }
         });
 
-        tutorialTexture= new Texture(Gdx.files.internal(""));
-        tutorialPressed = new Texture(Gdx.files.internal(""));
+        tutorialTexture= new Texture(Gdx.files.internal("Tutorial.png"));
+        tutorialPressed = new Texture(Gdx.files.internal("TutorialLuz.png"));
         ImageButton tutorial = new ImageButton(new TextureRegionDrawable(new TextureRegion(tutorialTexture)), new TextureRegionDrawable(new TextureRegion(tutorialPressed)));
         tutorial.addListener(new ActorGestureListener() {
             @Override
@@ -88,8 +92,8 @@ public class MainMenu extends ScreenAdapter {
             }
         });
 
-        creditsTexture = new Texture(Gdx.files.internal(""));
-        creditsPressed = new Texture(Gdx.files.internal(""));
+        creditsTexture = new Texture(Gdx.files.internal("Créditos.png"));
+        creditsPressed = new Texture(Gdx.files.internal("CréditosLuz.png"));
         ImageButton credits = new ImageButton(new TextureRegionDrawable(new TextureRegion(creditsTexture)), new TextureRegionDrawable(new TextureRegion(creditsPressed)));
         credits.addListener(new ActorGestureListener() {
             @Override
@@ -99,6 +103,22 @@ public class MainMenu extends ScreenAdapter {
                 dispose();
             }
         });
+
+        table = new Table();
+        table.debug();
+
+        table.row();
+        table.setFillParent(true);
+        table.add(play).expandX();
+        table.add(characters).expandX();
+        table.add(tutorial).expandX();
+        table.add(credits).expandX();
+        table.padBottom(80f);
+
+        stage.addActor(table);
+
+
+
     }
 
     @Override
@@ -126,7 +146,7 @@ public class MainMenu extends ScreenAdapter {
     }
 
     private void clearScreen() {
-        Gdx.gl.glClearColor(Color.BLACK.r, Color.BLACK.g, Color.BLACK.b, Color.BLACK.a);
+        Gdx.gl.glClearColor(Color.WHITE.r, Color.WHITE.g, Color.WHITE.b, Color.WHITE.a);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
     }
 
