@@ -46,9 +46,9 @@ public class TransitionScreen extends ScreenAdapter {
         stage.addActor(logo);
         logo.getColor().a = 0f;
 
-        background.addAction(sequence(delay(1), fadeOut(1)));
+        background.addAction(sequence(delay(1),fadeIn(1), fadeOut(2)));
 
-        logo.addAction(sequence(delay(1), fadeIn(1),delay(1), fadeOut(1), run(new Runnable() {
+        logo.addAction(sequence(delay(4), fadeIn(2),delay(2), fadeOut(2), run(new Runnable() {
             @Override
             public void run() {
                 game.setScreen(new MainMenu(game));

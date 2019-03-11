@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -26,6 +27,7 @@ public class CreditsScreen extends ScreenAdapter {
 
     private Texture menuTexture;
     private Texture menuPressed;
+    private Table table;
 
     public CreditsScreen(Game game) {
         this.game = game;
@@ -37,12 +39,12 @@ public class CreditsScreen extends ScreenAdapter {
         stage = new Stage(new FitViewport(WORLD_WIDTH, WORLD_HEIGHT));
         Gdx.input.setInputProcessor(stage);
 
-        backgroundTexture = new Texture(Gdx.files.internal(""));
+        backgroundTexture = new Texture(Gdx.files.internal("creditos.png"));
         Image background = new Image(backgroundTexture);
         stage.addActor(background);
 
-        menuTexture = new Texture(Gdx.files.internal(""));
-        menuPressed = new Texture(Gdx.files.internal(""));
+        menuTexture = new Texture(Gdx.files.internal("menuBotonNormal.png"));
+        menuPressed = new Texture(Gdx.files.internal("menuBoton.png"));
         ImageButton credits = new ImageButton(new TextureRegionDrawable(new TextureRegion(menuTexture)), new TextureRegionDrawable(new TextureRegion(menuPressed)));
         credits.addListener(new ActorGestureListener() {
             @Override
@@ -52,6 +54,16 @@ public class CreditsScreen extends ScreenAdapter {
                 dispose();
             }
         });
+
+        table = new Table();
+        table.debug();
+
+        table.row();
+        table.setFillParent(true);
+        table.add(credits).right().expandX();
+        table.padBottom(450f);
+
+        stage.addActor(table);
 
     }
 

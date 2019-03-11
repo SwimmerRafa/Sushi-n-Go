@@ -139,7 +139,6 @@ public class MainMenu extends ScreenAdapter {
         super.dispose();
         stage.dispose();
         backgroundTexture.dispose();
-        titleTexture.dispose();
         playTexture.dispose();
         playPressed.dispose();
 
