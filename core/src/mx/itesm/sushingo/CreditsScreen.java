@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 public class CreditsScreen extends ScreenAdapter {
     private final Game game;
@@ -36,7 +37,7 @@ public class CreditsScreen extends ScreenAdapter {
     @Override
     public void show() {
         super.show();
-        stage = new Stage(new FitViewport(WORLD_WIDTH, WORLD_HEIGHT));
+        stage = new Stage(new StretchViewport(WORLD_WIDTH, WORLD_HEIGHT));
         Gdx.input.setInputProcessor(stage);
 
         backgroundTexture = new Texture(Gdx.files.internal("creditos.png"));
@@ -45,8 +46,8 @@ public class CreditsScreen extends ScreenAdapter {
 
         menuTexture = new Texture(Gdx.files.internal("menuBotonNormal.png"));
         menuPressed = new Texture(Gdx.files.internal("menuBoton.png"));
-        ImageButton credits = new ImageButton(new TextureRegionDrawable(new TextureRegion(menuTexture)), new TextureRegionDrawable(new TextureRegion(menuPressed)));
-        credits.addListener(new ActorGestureListener() {
+        ImageButton menu = new ImageButton(new TextureRegionDrawable(new TextureRegion(menuTexture)), new TextureRegionDrawable(new TextureRegion(menuPressed)));
+        menu.addListener(new ActorGestureListener() {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 super.tap(event, x, y, count, button);
@@ -56,11 +57,10 @@ public class CreditsScreen extends ScreenAdapter {
         });
 
         table = new Table();
-        table.debug();
 
         table.row();
         table.setFillParent(true);
-        table.add(credits).right().expandX();
+        table.add(menu).right().expandX();
         table.padBottom(450f);
 
         stage.addActor(table);

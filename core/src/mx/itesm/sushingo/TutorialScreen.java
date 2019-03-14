@@ -11,9 +11,11 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 public class TutorialScreen extends ScreenAdapter {
     private final Game game;
@@ -30,20 +32,22 @@ public class TutorialScreen extends ScreenAdapter {
         this.game = game;
     }
 
+    private Table table;
+
     @Override
     public void show() {
         super.show();
-        stage = new Stage(new FitViewport(WORLD_WIDTH, WORLD_HEIGHT));
+        stage = new Stage(new StretchViewport(WORLD_WIDTH, WORLD_HEIGHT));
         Gdx.input.setInputProcessor(stage);
 
-        backgroundTexture =new Texture(Gdx.files.internal(""));
+        backgroundTexture =new Texture(Gdx.files.internal("tuto.png"));
         Image background = new Image(backgroundTexture);
         stage.addActor(background);
 
-        menuTexture = new Texture(Gdx.files.internal(""));
-        menuPressed = new Texture(Gdx.files.internal(""));
-        ImageButton credits = new ImageButton(new TextureRegionDrawable(new TextureRegion(menuTexture)), new TextureRegionDrawable(new TextureRegion(menuPressed)));
-        credits.addListener(new ActorGestureListener() {
+        menuTexture = new Texture(Gdx.files.internal("menuBotonNormal.png"));
+        menuPressed = new Texture(Gdx.files.internal("menuBoton.png"));
+        ImageButton  menu = new ImageButton(new TextureRegionDrawable(new TextureRegion(menuTexture)), new TextureRegionDrawable(new TextureRegion(menuPressed)));
+        menu.addListener(new ActorGestureListener() {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 super.tap(event, x, y, count, button);
@@ -51,6 +55,15 @@ public class TutorialScreen extends ScreenAdapter {
                 dispose();
             }
         });
+
+        table = new Table();
+
+        table.row();
+        table.setFillParent(true);
+        table.add(menu).right().expandX();
+        table.padBottom(450f);
+
+        stage.addActor(table);
 
     }
 

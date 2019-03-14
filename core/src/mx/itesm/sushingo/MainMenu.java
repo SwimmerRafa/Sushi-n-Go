@@ -3,8 +3,10 @@ package mx.itesm.sushingo;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -16,6 +18,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 import static com.badlogic.gdx.utils.Align.right;
 
@@ -28,7 +32,6 @@ public class MainMenu extends ScreenAdapter {
     private Stage stage;
 
     private Texture backgroundTexture;
-    private Texture titleTexture;
     private Table table;
 
     private Texture playTexture;
@@ -40,6 +43,7 @@ public class MainMenu extends ScreenAdapter {
     private Texture creditsTexture;
     private Texture creditsPressed;
 
+
     public MainMenu(Game game) {
         this.game = game;
     }
@@ -48,7 +52,7 @@ public class MainMenu extends ScreenAdapter {
     @Override
     public void show(){
         super.show();
-        stage = new Stage(new FitViewport(WORLD_WIDTH, WORLD_HEIGHT));
+        stage = new Stage(new StretchViewport(WORLD_WIDTH, WORLD_HEIGHT));
         Gdx.input.setInputProcessor(stage);
 
         backgroundTexture =new Texture(Gdx.files.internal("Menu.png"));
@@ -105,7 +109,6 @@ public class MainMenu extends ScreenAdapter {
         });
 
         table = new Table();
-        table.debug();
 
         table.row();
         table.setFillParent(true);
@@ -145,7 +148,7 @@ public class MainMenu extends ScreenAdapter {
     }
 
     private void clearScreen() {
-        Gdx.gl.glClearColor(Color.WHITE.r, Color.WHITE.g, Color.WHITE.b, Color.WHITE.a);
+        Gdx.gl.glClearColor(Color.BLACK.r, Color.BLACK.g, Color.BLACK.b, Color.BLACK.a);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
     }
 
