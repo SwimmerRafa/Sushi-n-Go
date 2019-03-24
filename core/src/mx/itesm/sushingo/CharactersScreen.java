@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
@@ -48,12 +49,14 @@ public class CharactersScreen extends ScreenAdapter {
         stage = new Stage(new StretchViewport(WORLD_WIDTH, WORLD_HEIGHT));
         Gdx.input.setInputProcessor(stage);
 
-        backgroundTexture =new Texture(Gdx.files.internal("per4.png"));
+        backgroundTexture =new Texture(Gdx.files.internal("Fondos/per4.png"));
         Image background = new Image(backgroundTexture);
         stage.addActor(background);
 
-        fishTexture = new Texture(Gdx.files.internal("sam.png"));
-        fishPressed = new Texture(Gdx.files.internal("sushisal.png"));
+
+
+        fishTexture = new Texture(Gdx.files.internal("Personajes/sam.png"));
+        fishPressed = new Texture(Gdx.files.internal("Personajes/sushisal.png"));
         ImageButton fish = new ImageButton(new TextureRegionDrawable(new TextureRegion(fishTexture)), new TextureRegionDrawable(new TextureRegion(fishPressed)));
         fish.addListener(new ActorGestureListener() {
             @Override
@@ -64,8 +67,8 @@ public class CharactersScreen extends ScreenAdapter {
             }
         });
 
-        octopusTexture = new Texture(Gdx.files.internal("paul.png"));
-        octopusPressed = new Texture(Gdx.files.internal("sushipaul.png"));
+        octopusTexture = new Texture(Gdx.files.internal("Personajes/paul.png"));
+        octopusPressed = new Texture(Gdx.files.internal("Personajes/sushipaul.png"));
         ImageButton octopus = new ImageButton(new TextureRegionDrawable(new TextureRegion(octopusTexture)), new TextureRegionDrawable(new TextureRegion(octopusPressed)));
         octopus.addListener(new ActorGestureListener() {
             @Override
@@ -76,8 +79,8 @@ public class CharactersScreen extends ScreenAdapter {
             }
         });
 
-        shrimpTexture= new Texture(Gdx.files.internal("cam.png"));
-        shrimpPressed = new Texture(Gdx.files.internal("suchicam.png"));
+        shrimpTexture= new Texture(Gdx.files.internal("Personajes/cam.png"));
+        shrimpPressed = new Texture(Gdx.files.internal("Personajes/suchicam.png"));
         ImageButton shrimp = new ImageButton(new TextureRegionDrawable(new TextureRegion(shrimpTexture)), new TextureRegionDrawable(new TextureRegion(shrimpPressed)));
         shrimp.addListener(new ActorGestureListener() {
             @Override
@@ -88,8 +91,8 @@ public class CharactersScreen extends ScreenAdapter {
             }
         });
 
-        menuTexture = new Texture(Gdx.files.internal("menuBotonNormal.png"));
-        menuPressed = new Texture(Gdx.files.internal("menuBoton.png"));
+        menuTexture = new Texture(Gdx.files.internal("Botones/menuBotonNormal.png"));
+        menuPressed = new Texture(Gdx.files.internal("Botones/menuBoton.png"));
         ImageButton menu = new ImageButton(new TextureRegionDrawable(new TextureRegion(menuTexture)), new TextureRegionDrawable(new TextureRegion(menuPressed)));
         menu.addListener(new ActorGestureListener() {
             @Override

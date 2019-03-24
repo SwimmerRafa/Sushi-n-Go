@@ -55,12 +55,12 @@ public class MainMenu extends ScreenAdapter {
         stage = new Stage(new StretchViewport(WORLD_WIDTH, WORLD_HEIGHT));
         Gdx.input.setInputProcessor(stage);
 
-        backgroundTexture =new Texture(Gdx.files.internal("Menu.png"));
+        backgroundTexture =new Texture(Gdx.files.internal("Fondos/Menu.png"));
         Image background = new Image(backgroundTexture);
         stage.addActor(background);
 
-        playTexture = new Texture(Gdx.files.internal("Jugar.png"));
-        playPressed = new Texture(Gdx.files.internal("JugarLuz.png"));
+        playTexture = new Texture(Gdx.files.internal("Botones/Jugar.png"));
+        playPressed = new Texture(Gdx.files.internal("Botones/JugarLuz.png"));
         ImageButton play = new ImageButton(new TextureRegionDrawable(new TextureRegion(playTexture)), new TextureRegionDrawable(new TextureRegion(playPressed)));
         play.addListener(new ActorGestureListener() {
             @Override
@@ -71,8 +71,8 @@ public class MainMenu extends ScreenAdapter {
             }
         });
 
-        charactersTexture = new Texture(Gdx.files.internal("Personajes.png"));
-        charactersPressed = new Texture(Gdx.files.internal("PerLuz.png"));
+        charactersTexture = new Texture(Gdx.files.internal("Botones/Personajes.png"));
+        charactersPressed = new Texture(Gdx.files.internal("Botones/PerLuz.png"));
 
         ImageButton characters = new ImageButton(new TextureRegionDrawable(new TextureRegion(charactersTexture)), new TextureRegionDrawable(new TextureRegion(charactersPressed)));
         characters.addListener(new ActorGestureListener() {
@@ -84,8 +84,8 @@ public class MainMenu extends ScreenAdapter {
             }
         });
 
-        tutorialTexture= new Texture(Gdx.files.internal("Tutorial.png"));
-        tutorialPressed = new Texture(Gdx.files.internal("TutorialLuz.png"));
+        tutorialTexture= new Texture(Gdx.files.internal("Botones/Tutorial.png"));
+        tutorialPressed = new Texture(Gdx.files.internal("Botones/TutorialLuz.png"));
         ImageButton tutorial = new ImageButton(new TextureRegionDrawable(new TextureRegion(tutorialTexture)), new TextureRegionDrawable(new TextureRegion(tutorialPressed)));
         tutorial.addListener(new ActorGestureListener() {
             @Override
@@ -96,8 +96,8 @@ public class MainMenu extends ScreenAdapter {
             }
         });
 
-        creditsTexture = new Texture(Gdx.files.internal("Créditos.png"));
-        creditsPressed = new Texture(Gdx.files.internal("CréditosLuz.png"));
+        creditsTexture = new Texture(Gdx.files.internal("Botones/Créditos.png"));
+        creditsPressed = new Texture(Gdx.files.internal("Botones/CréditosLuz.png"));
         ImageButton credits = new ImageButton(new TextureRegionDrawable(new TextureRegion(creditsTexture)), new TextureRegionDrawable(new TextureRegion(creditsPressed)));
         credits.addListener(new ActorGestureListener() {
             @Override

@@ -40,12 +40,12 @@ public class CreditsScreen extends ScreenAdapter {
         stage = new Stage(new StretchViewport(WORLD_WIDTH, WORLD_HEIGHT));
         Gdx.input.setInputProcessor(stage);
 
-        backgroundTexture = new Texture(Gdx.files.internal("creditos.png"));
+        backgroundTexture = new Texture(Gdx.files.internal("Fondos/creditos.png"));
         Image background = new Image(backgroundTexture);
         stage.addActor(background);
 
-        menuTexture = new Texture(Gdx.files.internal("menuBotonNormal.png"));
-        menuPressed = new Texture(Gdx.files.internal("menuBoton.png"));
+        menuTexture = new Texture(Gdx.files.internal("Botones/menuBotonNormal.png"));
+        menuPressed = new Texture(Gdx.files.internal("Botones/menuBoton.png"));
         ImageButton menu = new ImageButton(new TextureRegionDrawable(new TextureRegion(menuTexture)), new TextureRegionDrawable(new TextureRegion(menuPressed)));
         menu.addListener(new ActorGestureListener() {
             @Override

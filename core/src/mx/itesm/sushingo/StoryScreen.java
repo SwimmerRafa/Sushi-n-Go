@@ -25,8 +25,6 @@ public class StoryScreen extends ScreenAdapter {
 
     private Texture nextTexture;
     private Texture nextPressed;
-    private Texture prevTexture;
-    private Texture prevPressed;
     private Texture skipTexture;
     private Texture skipPressed;
     private Texture menuTexture;
@@ -58,17 +56,6 @@ public class StoryScreen extends ScreenAdapter {
             }
         });
 
-        prevTexture = new Texture(Gdx.files.internal(""));
-        prevPressed = new Texture(Gdx.files.internal(""));
-        ImageButton prev = new ImageButton(new TextureRegionDrawable(new TextureRegion(prevTexture)), new TextureRegionDrawable(new TextureRegion(prevPressed)));
-        prev.addListener(new ActorGestureListener() {
-            @Override
-            public void tap(InputEvent event, float x, float y, int count, int button) {
-                super.tap(event, x, y, count, button);
-                game.setScreen(new CharactersScreen(game));
-                dispose();
-            }
-        });
 
         skipTexture= new Texture(Gdx.files.internal(""));
         skipPressed = new Texture(Gdx.files.internal(""));
