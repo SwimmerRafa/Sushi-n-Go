@@ -1,8 +1,8 @@
 package mx.itesm.sushingo;
-
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -27,6 +27,7 @@ public class TutorialScreen extends ScreenAdapter {
     private Texture backgroundTexture;
     private Texture menuTexture;
     private Texture menuPressed;
+    private Music music;
 
     public TutorialScreen(Game game) {
         this.game = game;
@@ -65,6 +66,11 @@ public class TutorialScreen extends ScreenAdapter {
 
         stage.addActor(table);
 
+        music = Gdx.audio.newMusic(Gdx.files.internal("Audio/Menu01.mp3"));
+        music.setLooping(true);
+        music.setVolume(.3f);
+        music.play();
+
     }
 
     @Override
@@ -87,6 +93,7 @@ public class TutorialScreen extends ScreenAdapter {
         stage.dispose();
         backgroundTexture.dispose();
         menuTexture.dispose();
+        music.dispose();
     }
 
     private void clearScreen() {

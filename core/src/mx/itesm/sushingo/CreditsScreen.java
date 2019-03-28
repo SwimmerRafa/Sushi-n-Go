@@ -1,8 +1,8 @@
 package mx.itesm.sushingo;
-
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -29,6 +29,7 @@ public class CreditsScreen extends ScreenAdapter {
     private Texture menuTexture;
     private Texture menuPressed;
     private Table table;
+    private Music music;
 
     public CreditsScreen(Game game) {
         this.game = game;
@@ -47,6 +48,7 @@ public class CreditsScreen extends ScreenAdapter {
         menuTexture = new Texture(Gdx.files.internal("Botones/menuBotonNormal.png"));
         menuPressed = new Texture(Gdx.files.internal("Botones/menuBoton.png"));
         ImageButton menu = new ImageButton(new TextureRegionDrawable(new TextureRegion(menuTexture)), new TextureRegionDrawable(new TextureRegion(menuPressed)));
+
         menu.addListener(new ActorGestureListener() {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
@@ -64,6 +66,11 @@ public class CreditsScreen extends ScreenAdapter {
         table.padBottom(450f);
 
         stage.addActor(table);
+
+        music = Gdx.audio.newMusic(Gdx.files.internal("Audio/Menu01.mp3"));
+        music.setLooping(true);
+        music.setVolume(.3f);
+        music.play();
 
     }
 
@@ -87,6 +94,7 @@ public class CreditsScreen extends ScreenAdapter {
         stage.dispose();
         backgroundTexture.dispose();
         menuTexture.dispose();
+        music.dispose();
     }
 
     private void clearScreen() {

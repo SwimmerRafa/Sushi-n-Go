@@ -1,5 +1,4 @@
 package mx.itesm.sushingo;
-
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
