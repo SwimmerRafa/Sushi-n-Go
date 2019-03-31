@@ -1,5 +1,4 @@
-package mx.itesm.sushingo;
-
+package mx.itesm.sushingo.Pantallas;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
@@ -14,12 +13,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
-public class CharactersScreen extends ScreenAdapter {
+public class MainMenu extends ScreenAdapter {
+
     private final Game game;
     private static final float WORLD_WIDTH = 1280;
     private static final float WORLD_HEIGHT = 720;
@@ -27,23 +25,22 @@ public class CharactersScreen extends ScreenAdapter {
     private Stage stage;
 
     private Texture backgroundTexture;
-
-    private Texture fishTexture;
-    private Texture fishPressed;
-    private Texture octopusTexture;
-    private Texture octopusPressed;
-    private Texture shrimpTexture;
-    private Texture shrimpPressed;
-
-    private Texture menuTexture;
-    private Texture menuPressed;
-
     private Table table;
+
+    private Texture playTexture;
+    private Texture playPressed;
+    private Texture charactersTexture;
+    private Texture charactersPressed;
+    private Texture tutorialTexture;
+    private Texture tutorialPressed;
+    private Texture creditsTexture;
+    private Texture creditsPressed;
     private Music music;
 
-    public CharactersScreen(Game game) {
+    public MainMenu(Game game) {
         this.game = game;
     }
+
 
     @Override
     public void show(){
@@ -51,56 +48,59 @@ public class CharactersScreen extends ScreenAdapter {
         stage = new Stage(new StretchViewport(WORLD_WIDTH, WORLD_HEIGHT));
         Gdx.input.setInputProcessor(stage);
 
-        backgroundTexture =new Texture(Gdx.files.internal("Fondos/per4.png"));
+        backgroundTexture =new Texture(Gdx.files.internal("Fondos/Menu.png"));
         Image background = new Image(backgroundTexture);
         stage.addActor(background);
 
+        playTexture = new Texture(Gdx.files.internal("Botones/Jugar.png"));
+        playPressed = new Texture(Gdx.files.internal("Botones/JugarLuz.png"));
+        ImageButton play = new ImageButton(new TextureRegionDrawable(new TextureRegion(playTexture)), new TextureRegionDrawable(new TextureRegion(playPressed)));
 
-
-        fishTexture = new Texture(Gdx.files.internal("Personajes/sam.png"));
-        fishPressed = new Texture(Gdx.files.internal("Personajes/sushisal.png"));
-        ImageButton fish = new ImageButton(new TextureRegionDrawable(new TextureRegion(fishTexture)), new TextureRegionDrawable(new TextureRegion(fishPressed)));
-        fish.addListener(new ActorGestureListener() {
+        play.addListener(new ActorGestureListener() {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 super.tap(event, x, y, count, button);
-                game.setScreen(new MainMenu(game));
+                game.setScreen(new ScenariosScreen(game));
                 dispose();
             }
         });
 
-        octopusTexture = new Texture(Gdx.files.internal("Personajes/paul.png"));
-        octopusPressed = new Texture(Gdx.files.internal("Personajes/sushipaul.png"));
-        ImageButton octopus = new ImageButton(new TextureRegionDrawable(new TextureRegion(octopusTexture)), new TextureRegionDrawable(new TextureRegion(octopusPressed)));
-        octopus.addListener(new ActorGestureListener() {
+        charactersTexture = new Texture(Gdx.files.internal("Botones/Personajes.png"));
+        charactersPressed = new Texture(Gdx.files.internal("Botones/PerLuz.png"));
+
+        ImageButton characters = new ImageButton(new TextureRegionDrawable(new TextureRegion(charactersTexture)), new TextureRegionDrawable(new TextureRegion(charactersPressed)));
+
+        characters.addListener(new ActorGestureListener() {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 super.tap(event, x, y, count, button);
-                game.setScreen(new MainMenu(game));
+                game.setScreen(new CharactersScreen(game));
                 dispose();
             }
         });
 
-        shrimpTexture= new Texture(Gdx.files.internal("Personajes/cam.png"));
-        shrimpPressed = new Texture(Gdx.files.internal("Personajes/suchicam.png"));
-        ImageButton shrimp = new ImageButton(new TextureRegionDrawable(new TextureRegion(shrimpTexture)), new TextureRegionDrawable(new TextureRegion(shrimpPressed)));
-        shrimp.addListener(new ActorGestureListener() {
+        tutorialTexture= new Texture(Gdx.files.internal("Botones/Tutorial.png"));
+        tutorialPressed = new Texture(Gdx.files.internal("Botones/TutorialLuz.png"));
+        ImageButton tutorial = new ImageButton(new TextureRegionDrawable(new TextureRegion(tutorialTexture)), new TextureRegionDrawable(new TextureRegion(tutorialPressed)));
+
+        tutorial.addListener(new ActorGestureListener() {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 super.tap(event, x, y, count, button);
-                game.setScreen(new MainMenu(game));
+                game.setScreen(new TutorialScreen(game));
                 dispose();
             }
         });
 
-        menuTexture = new Texture(Gdx.files.internal("Botones/menuBotonNormal.png"));
-        menuPressed = new Texture(Gdx.files.internal("Botones/menuBoton.png"));
-        ImageButton menu = new ImageButton(new TextureRegionDrawable(new TextureRegion(menuTexture)), new TextureRegionDrawable(new TextureRegion(menuPressed)));
-        menu.addListener(new ActorGestureListener() {
+        creditsTexture = new Texture(Gdx.files.internal("Botones/Créditos.png"));
+        creditsPressed = new Texture(Gdx.files.internal("Botones/CréditosLuz.png"));
+        ImageButton credits = new ImageButton(new TextureRegionDrawable(new TextureRegion(creditsTexture)), new TextureRegionDrawable(new TextureRegion(creditsPressed)), new TextureRegionDrawable(new TextureRegion(creditsPressed)));
+
+        credits.addListener(new ActorGestureListener() {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 super.tap(event, x, y, count, button);
-                game.setScreen(new MainMenu(game));
+                game.setScreen(new CreditsScreen(game));
                 dispose();
             }
         });
@@ -109,21 +109,17 @@ public class CharactersScreen extends ScreenAdapter {
 
         table.row();
         table.setFillParent(true);
-        table.add(menu).colspan(10).expand().right();
-        table.row();
-        table.add(shrimp).expandX().center();
-        table.add(fish).expandX().center();
-        table.add(octopus).expandX().center();
-        table.padBottom(230f);
-
-        table.setFillParent(true);
-        table.pack();
+        table.add(play).expandX();
+        table.add(characters).expandX();
+        table.add(tutorial).expandX();
+        table.add(credits).expandX();
+        table.padBottom(80f);
 
         stage.addActor(table);
 
-        music = Gdx.audio.newMusic(Gdx.files.internal("Audio/Menu.mp3"));
+        music = Gdx.audio.newMusic(Gdx.files.internal("Audio/Mo_Shio.mp3"));
         music.setLooping(true);
-        music.setVolume(.7f);
+        music.setVolume(.3f);
         music.play();
     }
 
@@ -141,12 +137,12 @@ public class CharactersScreen extends ScreenAdapter {
         stage.draw();
     }
 
-    @Override
     public void dispose() {
         super.dispose();
         stage.dispose();
         backgroundTexture.dispose();
-        menuTexture.dispose();
+        playTexture.dispose();
+        playPressed.dispose();
         music.dispose();
     }
 
@@ -154,4 +150,5 @@ public class CharactersScreen extends ScreenAdapter {
         Gdx.gl.glClearColor(Color.BLACK.r, Color.BLACK.g, Color.BLACK.b, Color.BLACK.a);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
     }
+
 }

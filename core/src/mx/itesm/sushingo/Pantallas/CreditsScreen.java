@@ -1,4 +1,4 @@
-package mx.itesm.sushingo;
+package mx.itesm.sushingo.Pantallas;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
@@ -17,7 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
-public class TutorialScreen extends ScreenAdapter {
+public class CreditsScreen extends ScreenAdapter {
     private final Game game;
     private static final float WORLD_WIDTH = 1280;
     private static final float WORLD_HEIGHT = 720;
@@ -25,15 +25,15 @@ public class TutorialScreen extends ScreenAdapter {
     private Stage stage;
 
     private Texture backgroundTexture;
+
     private Texture menuTexture;
     private Texture menuPressed;
+    private Table table;
     private Music music;
 
-    public TutorialScreen(Game game) {
+    public CreditsScreen(Game game) {
         this.game = game;
     }
-
-    private Table table;
 
     @Override
     public void show() {
@@ -41,13 +41,14 @@ public class TutorialScreen extends ScreenAdapter {
         stage = new Stage(new StretchViewport(WORLD_WIDTH, WORLD_HEIGHT));
         Gdx.input.setInputProcessor(stage);
 
-        backgroundTexture =new Texture(Gdx.files.internal("Fondos/tuto.png"));
+        backgroundTexture = new Texture(Gdx.files.internal("Fondos/creditos.png"));
         Image background = new Image(backgroundTexture);
         stage.addActor(background);
 
         menuTexture = new Texture(Gdx.files.internal("Botones/menuBotonNormal.png"));
         menuPressed = new Texture(Gdx.files.internal("Botones/menuBoton.png"));
-        ImageButton  menu = new ImageButton(new TextureRegionDrawable(new TextureRegion(menuTexture)), new TextureRegionDrawable(new TextureRegion(menuPressed)));
+        ImageButton menu = new ImageButton(new TextureRegionDrawable(new TextureRegion(menuTexture)), new TextureRegionDrawable(new TextureRegion(menuPressed)));
+
         menu.addListener(new ActorGestureListener() {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {

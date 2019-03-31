@@ -1,4 +1,4 @@
-package mx.itesm.sushingo;
+package mx.itesm.sushingo.Pantallas;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
@@ -14,8 +14,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
+
+import mx.itesm.sushingo.States.GameScreen;
 
 public class ScenariosScreen extends ScreenAdapter {
     private final Game game;
@@ -58,7 +59,7 @@ public class ScenariosScreen extends ScreenAdapter {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 super.tap(event, x, y, count, button);
-                game.setScreen(new StoryScreen(game));
+                game.setScreen(new GameScreen(game));
                 dispose();
             }
         });
@@ -70,7 +71,7 @@ public class ScenariosScreen extends ScreenAdapter {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 super.tap(event, x, y, count, button);
-                game.setScreen(new StoryScreen(game));
+                game.setScreen(new GameScreen(game));
                 dispose();
             }
         });
@@ -82,7 +83,7 @@ public class ScenariosScreen extends ScreenAdapter {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 super.tap(event, x, y, count, button);
-                game.setScreen(new StoryScreen(game));
+                game.setScreen(new GameScreen(game));
                 dispose();
             }
         });
