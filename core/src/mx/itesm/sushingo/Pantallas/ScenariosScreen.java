@@ -17,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 import mx.itesm.sushingo.States.GameScreen;
+import mx.itesm.sushingo.SushinGo;
 
 public class ScenariosScreen extends ScreenAdapter {
     private final Game game;

@@ -16,6 +16,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
+import mx.itesm.sushingo.SushinGo;
+
 public class MainMenu extends ScreenAdapter {
 
     private final Game game;
@@ -60,7 +62,7 @@ public class MainMenu extends ScreenAdapter {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 super.tap(event, x, y, count, button);
-                game.setScreen(new ScenariosScreen(game));
+                game.setScreen(new Story(game));
                 dispose();
             }
         });

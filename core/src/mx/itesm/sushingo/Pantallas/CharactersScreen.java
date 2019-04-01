@@ -19,6 +19,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
+import mx.itesm.sushingo.SushinGo;
+
 public class CharactersScreen extends ScreenAdapter {
     private final Game game;
     private static final float WORLD_WIDTH = 1280;

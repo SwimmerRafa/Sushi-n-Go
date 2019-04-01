@@ -25,8 +25,6 @@ public class BackGround extends Actor {
         speed = 0;
 
         x = y = originX = originY = rotation = srcY = 0;
-        //width =  Gdx.graphics.getWidth();
-        //heigth = Gdx.graphics.getHeight();
         this.width = width;
         this.heigth = heigth;
         scaleX = scaleY = 1;
@@ -47,5 +45,4 @@ public class BackGround extends Actor {
             batch.draw(layers.get(i), x, y, originX, originY, width, heigth,scaleX,scaleY,rotation,srcX,srcY,layers.get(i).getWidth(),layers.get(i).getHeight(),flipX,flipY);
         }
     }
-
 }
