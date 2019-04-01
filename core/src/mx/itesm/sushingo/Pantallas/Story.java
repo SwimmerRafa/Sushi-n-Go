@@ -69,7 +69,6 @@ public class Story extends ScreenAdapter {
         image4.addAction(sequence(fadeIn(1), fadeOut(1)));
         image5.addAction(sequence(fadeIn(1), fadeOut(1)));
         image6.addAction(sequence(fadeIn(1), fadeOut(1)));
-
         image7.addAction(sequence(fadeIn(1),delay(1), fadeOut(2), run(new Runnable() {
             @Override
             public void run() {

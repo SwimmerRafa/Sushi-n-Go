@@ -2,6 +2,7 @@ package mx.itesm.sushingo.States;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
@@ -19,6 +20,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import mx.itesm.sushingo.Hud;
 import mx.itesm.sushingo.Sprites.BackGround;
 import mx.itesm.sushingo.Sprites.Sam;
 import mx.itesm.sushingo.SushinGo;
@@ -43,6 +45,7 @@ public class GameScreen extends ScreenAdapter {
     private static final float SCENE_HEIGHT = 720;
 
     private Sam sam;
+    private Hud hud;
 
 
     public GameScreen (Game game){ this.game = game; }
@@ -61,8 +64,7 @@ public class GameScreen extends ScreenAdapter {
         shapeRenderer = new ShapeRenderer();
         batch = new SpriteBatch();
 
-
-        sam = new Sam(50,100);
+        sam = new Sam(50,300);
 
         Array<Texture> textures = new Array<Texture>();
         for(int i = 1; i <=3;i++){
@@ -72,9 +74,8 @@ public class GameScreen extends ScreenAdapter {
 
         BackGround parallaxBackground = new BackGround(textures, SCENE_WIDTH, SCENE_HEIGHT);
         parallaxBackground.setSize(SCENE_WIDTH,SCENE_HEIGHT);
-        parallaxBackground.setSpeed(1);
+        parallaxBackground.setSpeed(2);
         stage.addActor(parallaxBackground);
-        stage.addActor(sam);
 
         Gdx.input.setInputProcessor(stage);
 
@@ -82,8 +83,15 @@ public class GameScreen extends ScreenAdapter {
         music.setLooping(true);
         music.setVolume(.3f);
         music.play();
-
     }
+
+    private void updateSam(float delta){
+        sam.update(delta);
+        if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)|| Gdx.input.isTouched()){
+            sam.jump();
+        }
+    }
+
 
     @Override
     public void render(float delta) {
@@ -97,10 +105,14 @@ public class GameScreen extends ScreenAdapter {
         batch.setProjectionMatrix(camera.projection);
         batch.setTransformMatrix(camera.view);
         batch.begin();
-        batch.draw(sam.getTexture(),sam.getPosition().x, sam.getPosition().y);
+        hud = new Hud(batch);
+        batch.draw(sam.getTexture(),sam.getPosition().x,sam.getPosition().y);
         stage.act();
         stage.draw();
         batch.end();
+
+        batch.setProjectionMatrix(hud.stage.getCamera().combined);
+        hud.stage.draw();
     }
 
     @Override
@@ -114,20 +126,19 @@ public class GameScreen extends ScreenAdapter {
     public void dispose() {
         stage.dispose();
         music.dispose();
+        hud.dispose();
+        sam.dispose();
     }
 
-
-    private void updateSam (float delta){
-        sam.update(delta);
-    }
+    public Hud getHud(){return hud;}
 
     public void update (float delta){
         updateSam(delta);
+        camera.position.x = sam.getPosition().x + 80;
     }
 
     private void clearScreen() {
         Gdx.gl.glClearColor(Color.BLACK.r, Color.BLACK.g, Color.BLACK.b, Color.BLACK.a);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
     }
-
 }

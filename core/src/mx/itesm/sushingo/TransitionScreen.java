@@ -42,12 +42,12 @@ public class TransitionScreen extends ScreenAdapter {
 
         Image background = new Image(backgroundTexture);
         Image logo = new Image(logoTexture);
+
         stage.addActor(background);
         stage.addActor(logo);
         logo.getColor().a = 0f;
 
         background.addAction(sequence(delay(1),fadeIn(1), fadeOut(2)));
-
         logo.addAction(sequence(delay(4), fadeIn(2),delay(2), fadeOut(2), run(new Runnable() {
             @Override
             public void run() {
