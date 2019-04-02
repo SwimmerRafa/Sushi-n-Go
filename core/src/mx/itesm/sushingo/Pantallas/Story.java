@@ -64,12 +64,14 @@ public class Story extends ScreenAdapter {
         stage.addActor(image7);
 
         image1.addAction(sequence(fadeIn(1), fadeOut(1)));
-        image2.addAction(sequence(fadeIn(1), fadeOut(1)));
-        image3.addAction(sequence(fadeIn(1), fadeOut(1)));
-        image4.addAction(sequence(fadeIn(1), fadeOut(1)));
-        image5.addAction(sequence(fadeIn(1), fadeOut(1)));
-        image6.addAction(sequence(fadeIn(1), fadeOut(1)));
-        image7.addAction(sequence(fadeIn(1),delay(1), fadeOut(2), run(new Runnable() {
+        image2.addAction(sequence(delay(2),fadeIn(1), fadeOut(1)));
+
+        image3.addAction(sequence(delay(4),fadeIn(1), fadeOut(1)));
+        image4.addAction(sequence(delay(6),fadeIn(1), fadeOut(1)));
+        image5.addAction(sequence(delay(8),fadeIn(1), fadeOut(1)));
+        image6.addAction(sequence(delay(10),fadeIn(1), fadeOut(1)));
+
+        image7.addAction(sequence(delay(1),fadeIn(1), fadeOut(1), run(new Runnable() {
             @Override
             public void run() {
                 game.setScreen(new ScenariosScreen(game));

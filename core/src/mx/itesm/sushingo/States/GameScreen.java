@@ -4,27 +4,21 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-
 import mx.itesm.sushingo.Hud;
 import mx.itesm.sushingo.Sprites.BackGround;
 import mx.itesm.sushingo.Sprites.Sam;
-import mx.itesm.sushingo.SushinGo;
-;
 
 public class GameScreen extends ScreenAdapter {
     private static final float WORLD_WIDTH = 1280;
@@ -47,7 +41,6 @@ public class GameScreen extends ScreenAdapter {
     private Sam sam;
     private Hud hud;
 
-
     public GameScreen (Game game){ this.game = game; }
 
     @Override
@@ -56,15 +49,18 @@ public class GameScreen extends ScreenAdapter {
         camera = new OrthographicCamera();
         viewport = new StretchViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
 
-        camera.position.set(SCENE_WIDTH, SCENE_HEIGHT, camera.position.z);
+        camera.position.set(SCENE_WIDTH/2, SCENE_HEIGHT/2, camera.position.z);
         camera.update();
 
         stage = new Stage(new FitViewport(SCENE_WIDTH, SCENE_HEIGHT));
 
         shapeRenderer = new ShapeRenderer();
         batch = new SpriteBatch();
+        hud = new Hud(batch);
 
-        sam = new Sam(50,300);
+        sam = new Sam();
+        sam.setPosition(WORLD_WIDTH / 4, WORLD_HEIGHT / 2);
+
 
         Array<Texture> textures = new Array<Texture>();
         for(int i = 1; i <=3;i++){
@@ -90,6 +86,16 @@ public class GameScreen extends ScreenAdapter {
         if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)|| Gdx.input.isTouched()){
             sam.jump();
         }
+        blockSamLeavingTheWorld();
+    }
+
+    private void blockSamLeavingTheWorld() {
+        if (sam.getY() < 0) {
+            sam.setPosition(sam.getX(), 0);
+        }
+        if (sam.getY() > WORLD_HEIGHT) {
+            sam.setPosition(sam.getX(), WORLD_HEIGHT);
+        }
     }
 
 
@@ -102,13 +108,17 @@ public class GameScreen extends ScreenAdapter {
     }
 
     private void draw() {
-        batch.setProjectionMatrix(camera.projection);
-        batch.setTransformMatrix(camera.view);
-        batch.begin();
-        hud = new Hud(batch);
-        batch.draw(sam.getTexture(),sam.getPosition().x,sam.getPosition().y);
         stage.act();
         stage.draw();
+
+
+        hud = new Hud(batch);
+
+        batch.setProjectionMatrix(camera.projection);
+        batch.setTransformMatrix(camera.view);
+
+        batch.begin();
+        sam.draw(batch);
         batch.end();
 
         batch.setProjectionMatrix(hud.stage.getCamera().combined);
@@ -134,7 +144,6 @@ public class GameScreen extends ScreenAdapter {
 
     public void update (float delta){
         updateSam(delta);
-        camera.position.x = sam.getPosition().x + 80;
     }
 
     private void clearScreen() {
