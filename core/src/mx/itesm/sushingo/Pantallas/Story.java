@@ -55,23 +55,10 @@ public class Story extends ScreenAdapter {
         Image image6 = new Image(story6);
         Image image7 = new Image(story7);
 
-        stage.addActor(image1);
-        stage.addActor(image2);
-        stage.addActor(image3);
-        stage.addActor(image4);
-        stage.addActor(image5);
-        stage.addActor(image6);
+
         stage.addActor(image7);
 
-        image1.addAction(sequence(fadeIn(1), fadeOut(1)));
-        image2.addAction(sequence(delay(2),fadeIn(1), fadeOut(1)));
-
-        image3.addAction(sequence(delay(4),fadeIn(1), fadeOut(1)));
-        image4.addAction(sequence(delay(6),fadeIn(1), fadeOut(1)));
-        image5.addAction(sequence(delay(8),fadeIn(1), fadeOut(1)));
-        image6.addAction(sequence(delay(10),fadeIn(1), fadeOut(1)));
-
-        image7.addAction(sequence(delay(1),fadeIn(1), fadeOut(1), run(new Runnable() {
+        image7.addAction(sequence(delay(24),fadeIn(2), fadeOut(2), run(new Runnable() {
             @Override
             public void run() {
                 game.setScreen(new ScenariosScreen(game));
@@ -79,6 +66,18 @@ public class Story extends ScreenAdapter {
             }
         })));
 
+        stage.addActor(image6);
+        image6.addAction(sequence(delay(20),fadeIn(2), fadeOut(2)));
+        stage.addActor(image5);
+        image5.addAction(sequence(delay(16),fadeIn(2), fadeOut(2)));
+        stage.addActor(image4);
+        image4.addAction(sequence(delay(12),fadeIn(2), fadeOut(2)));
+        stage.addActor(image3);
+        image3.addAction(sequence(delay(8),fadeIn(2), fadeOut(2)));
+        stage.addActor(image2);
+        image2.addAction(sequence(delay(4),fadeIn(2), fadeOut(2)));
+        stage.addActor(image1);
+        image1.addAction(sequence(fadeIn(2), fadeOut(2)));
     }
 
 
@@ -100,13 +99,6 @@ public class Story extends ScreenAdapter {
     public void dispose() {
         super.dispose();
         stage.dispose();
-        story1.dispose();
-        story2.dispose();
-        story3.dispose();
-        story4.dispose();
-        story5.dispose();
-        story6.dispose();
-        story7.dispose();
     }
 
     private void clearScreen() {
