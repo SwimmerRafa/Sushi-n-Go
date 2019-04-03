@@ -5,6 +5,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
@@ -24,6 +25,9 @@ public class Sam {
     private float ySpeed = 0;
     private static final float DIVE_ACCEL = 0.30F;
     private static final float FLY_ACCEL = 5F;
+    private enum state {NORMAL, HIT};
+    private float hitTimer = 1;
+    private boolean isHit = false;
 
     public Sam(){
 
@@ -39,6 +43,13 @@ public class Sam {
         birdAnimation.update(dt);
         ySpeed -= DIVE_ACCEL;
         setPosition(x, y + ySpeed);
+        if (isHit()){
+            hitTimer -= dt;
+            if(hitTimer==0){
+                isHit = false;
+                hitTimer = 1;
+            }
+        }
     }
 
     public TextureRegion getTexture() {
@@ -84,5 +95,17 @@ public class Sam {
     private void updateCollisionCircle() {
         collisionCircle.setX(x);
         collisionCircle.setY(y);
+    }
+
+    public float getHeight(){
+        return COLLISION_RADIUS;
+    }
+
+    public boolean isHit() {
+        return isHit;
+    }
+
+    public void setHit(boolean hit) {
+        isHit = hit;
     }
 }
