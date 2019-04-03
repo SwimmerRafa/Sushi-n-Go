@@ -40,9 +40,8 @@ public class Hud implements Disposable {
         livesLabel = new Label(String.format("%03d",lives),new Label.LabelStyle(new BitmapFont(), Color.BLACK));
         scoreLabel =new Label(String.format("%06d", score), new Label.LabelStyle(new BitmapFont(), Color.BLACK));
         scoreL = new Label("SCORE", new Label.LabelStyle(new BitmapFont(), Color.BLACK));
-        scoreL.setSize(500,500);
         samLabel = new Label("LIVES", new Label.LabelStyle(new BitmapFont(), Color.BLACK));
-        scoreL.setSize(500,500);
+
 
         table.add(samLabel).expandX().padTop(10f);
         table.add(scoreL).expandX().padTop(10f);

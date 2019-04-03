@@ -18,6 +18,7 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import mx.itesm.sushingo.Hud;
 import mx.itesm.sushingo.Sprites.BackGround;
+import mx.itesm.sushingo.Sprites.Items;
 import mx.itesm.sushingo.Sprites.Sam;
 
 public class GameScreen extends ScreenAdapter {
@@ -40,8 +41,11 @@ public class GameScreen extends ScreenAdapter {
 
     private Sam sam;
     private Hud hud;
+    private Array<Items> items = new Array<Items>();
 
-    public GameScreen (Game game){ this.game = game; }
+    public GameScreen(Game game) {
+        this.game = game;
+    }
 
     @Override
     public void show() {
@@ -49,7 +53,7 @@ public class GameScreen extends ScreenAdapter {
         camera = new OrthographicCamera();
         viewport = new StretchViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
 
-        camera.position.set(SCENE_WIDTH/2, SCENE_HEIGHT/2, camera.position.z);
+        camera.position.set(SCENE_WIDTH / 2, SCENE_HEIGHT / 2, camera.position.z);
         camera.update();
 
         stage = new Stage(new FitViewport(SCENE_WIDTH, SCENE_HEIGHT));
@@ -63,13 +67,13 @@ public class GameScreen extends ScreenAdapter {
 
 
         Array<Texture> textures = new Array<Texture>();
-        for(int i = 1; i <=3;i++){
-            textures.add(new Texture(Gdx.files.internal("Ejemplo/fondo"+i+".png")));
-            textures.get(textures.size-1).setWrap(Texture.TextureWrap.MirroredRepeat, Texture.TextureWrap.MirroredRepeat);
+        for (int i = 1; i <= 3; i++) {
+            textures.add(new Texture(Gdx.files.internal("Ejemplo/fondo" + i + ".png")));
+            textures.get(textures.size - 1).setWrap(Texture.TextureWrap.MirroredRepeat, Texture.TextureWrap.MirroredRepeat);
         }
 
         BackGround parallaxBackground = new BackGround(textures, SCENE_WIDTH, SCENE_HEIGHT);
-        parallaxBackground.setSize(SCENE_WIDTH,SCENE_HEIGHT);
+        parallaxBackground.setSize(SCENE_WIDTH, SCENE_HEIGHT);
         parallaxBackground.setSpeed(2);
         stage.addActor(parallaxBackground);
 
@@ -81,9 +85,9 @@ public class GameScreen extends ScreenAdapter {
         music.play();
     }
 
-    private void updateSam(float delta){
+    private void updateSam(float delta) {
         sam.update(delta);
-        if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)|| Gdx.input.isTouched()){
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) || Gdx.input.isTouched()) {
             sam.jump();
         }
         blockSamLeavingTheWorld();
@@ -118,6 +122,7 @@ public class GameScreen extends ScreenAdapter {
         batch.setTransformMatrix(camera.view);
 
         batch.begin();
+        drawItems();
         sam.draw(batch);
         batch.end();
 
@@ -140,14 +145,74 @@ public class GameScreen extends ScreenAdapter {
         sam.dispose();
     }
 
-    public Hud getHud(){return hud;}
+    public Hud getHud() {
+        return hud;
+    }
 
-    public void update (float delta){
+    public void update(float delta) {
         updateSam(delta);
+        updateItems(delta);
+        if (checkForCollision()) {
+            restart();
+        }
+    }
+
+    private void restart() {
+        sam.setPosition(WORLD_WIDTH / 4, WORLD_HEIGHT / 2);
+        items.clear();
     }
 
     private void clearScreen() {
         Gdx.gl.glClearColor(Color.BLACK.r, Color.BLACK.g, Color.BLACK.b, Color.BLACK.a);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+    }
+
+    private boolean checkForCollision() {
+        for (Items items : items) {
+            if (items.isSamColliding(sam)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void updateItems(float delta) {
+        for (Items item : items) {
+            item.update(delta);
+        }
+        checkIfNewItemIsNeeded();
+        removeItemsIfPassed();
+    }
+
+    private void drawItems() {
+        for (Items item : items) {
+            item.draw(batch);
+        }
+    }
+
+    private void checkIfNewItemIsNeeded() {
+        if (items.size == 0) {
+            createNewItem();
+        } else {
+            Items flower = items.peek();
+            if (flower.getX() < Items.WIDTH ){
+                createNewItem();
+            }
+        }
+    }
+
+    private void createNewItem() {
+        Items newItems = new Items();
+        newItems.setPosition(WORLD_WIDTH + Items.WIDTH);
+        items.add(newItems);
+    }
+
+    private void removeItemsIfPassed() {
+        if (items.size > 0) {
+            Items firstItem = items.first();
+            if (firstItem.getX() < -WORLD_WIDTH) {
+                items.removeValue(firstItem, true);
+            }
+        }
     }
 }

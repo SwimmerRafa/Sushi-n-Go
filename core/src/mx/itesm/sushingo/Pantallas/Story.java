@@ -46,7 +46,6 @@ public class Story extends ScreenAdapter {
         story6 = new Texture(Gdx.files.internal("Story/6a.png"));
         story7 = new Texture(Gdx.files.internal("Story/7a.png"));
 
-
         Image image1 = new Image(story1);
         Image image2 = new Image(story2);
         Image image3 = new Image(story3);
@@ -54,7 +53,6 @@ public class Story extends ScreenAdapter {
         Image image5 = new Image(story5);
         Image image6 = new Image(story6);
         Image image7 = new Image(story7);
-
 
         stage.addActor(image7);
 
@@ -79,7 +77,6 @@ public class Story extends ScreenAdapter {
         stage.addActor(image1);
         image1.addAction(sequence(fadeIn(2), fadeOut(2)));
     }
-
 
     @Override
     public void resize(int width, int height) {

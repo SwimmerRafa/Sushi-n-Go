@@ -27,7 +27,7 @@ public class Sam {
 
     public Sam(){
 
-        texture = new Texture(Gdx.files.internal("birdanimation.png"));
+        texture = new Texture(Gdx.files.internal("Personajes/pez.png"));
         birdAnimation = new Animation(new TextureRegion(texture), 3, 0.5f);
         bounds = new Rectangle(x, y, texture.getWidth()/3, texture.getHeight());
         flap = Gdx.audio.newSound(Gdx.files.internal("Audio/Hit.mp3"));
@@ -86,7 +86,3 @@ public class Sam {
         collisionCircle.setY(y);
     }
 }
-
-
-
-
