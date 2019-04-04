@@ -7,8 +7,14 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.delay;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeIn;
@@ -29,6 +35,9 @@ public class Story extends ScreenAdapter {
     private Texture story6;
     private Texture story7;
     private Music music;
+    private Texture menuTexture;
+    private Texture menuPressed;
+    private Table table;
 
     public Story(Game game){
         this.game = game;
@@ -48,6 +57,18 @@ public class Story extends ScreenAdapter {
         story6 = new Texture(Gdx.files.internal("Story/6a.png"));
         story7 = new Texture(Gdx.files.internal("Story/7a.png"));
 
+        menuTexture = new Texture(Gdx.files.internal("Botones/menuho.png"));
+        menuPressed = new Texture(Gdx.files.internal("Botones/mmenuhorlu.png"));
+        ImageButton menu = new ImageButton(new TextureRegionDrawable(new TextureRegion(menuTexture)), new TextureRegionDrawable(new TextureRegion(menuPressed)));
+        menu.addListener(new ActorGestureListener() {
+            @Override
+            public void tap(InputEvent event, float x, float y, int count, int button) {
+                super.tap(event, x, y, count, button);
+                game.setScreen(new MainMenu(game));
+                dispose();
+            }
+        });
+
         Image image1 = new Image(story1);
         Image image2 = new Image(story2);
         Image image3 = new Image(story3);
@@ -58,10 +79,10 @@ public class Story extends ScreenAdapter {
 
         stage.addActor(image7);
 
-        image7.addAction(sequence(delay(24),fadeIn(2), fadeOut(2), run(new Runnable() {
+        image7.addAction(sequence(delay(24),fadeIn(2), fadeOut(0.19f), run(new Runnable() {
             @Override
             public void run() {
-                game.setScreen(new ScenariosScreen(game));
+                game.setScreen(new MainMenu(game));
                 dispose();
             }
         })));
@@ -78,6 +99,15 @@ public class Story extends ScreenAdapter {
         image2.addAction(sequence(delay(4),fadeIn(2), fadeOut(2)));
         stage.addActor(image1);
         image1.addAction(sequence(fadeIn(2), fadeOut(2)));
+
+        table = new Table();
+
+        table.row();
+        table.setFillParent(true);
+        table.add(menu).right().expandX();
+        table.padBottom(600f);
+
+        stage.addActor(table);
 
         music = Gdx.audio.newMusic(Gdx.files.internal("Audio/Story.mp3"));
         music.setLooping(true);

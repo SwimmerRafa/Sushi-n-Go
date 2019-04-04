@@ -214,6 +214,9 @@ public class GameScreen extends ScreenAdapter {
         badItems.clear();
         goodItems.clear();
         lives = 3;
+        score=0;
+        scoreLabel.setText(String.format("%06d", score));
+        livesLabel.setText(String.format("%03d", lives));
     }
 
     private void updateBadItems(float delta) {
@@ -283,7 +286,7 @@ public class GameScreen extends ScreenAdapter {
         }
         else {
             lives -= value;
-            scoreLabel.setText(String.format("%03d", lives));
+            livesLabel.setText(String.format("%03d", lives));
         }
     }
 

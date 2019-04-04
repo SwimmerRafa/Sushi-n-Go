@@ -3,6 +3,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -38,6 +39,7 @@ public class ScenariosScreen extends ScreenAdapter {
     private Texture menuPressed;
     private Table table;
     private Music music;
+    private Sound sound;
 
     public ScenariosScreen(Game game) {
         this.game = game;
@@ -52,10 +54,14 @@ public class ScenariosScreen extends ScreenAdapter {
         backgroundTexture = new Texture(Gdx.files.internal("Fondos/ecenarios.png"));
         Image background = new Image(backgroundTexture);
         stage.addActor(background);
+        sound = Gdx.audio.newSound(Gdx.files.internal("Audio/Ready.mp3"));
 
         scenario1Texture = new Texture(Gdx.files.internal("Botones/Moshio.png"));
         scenario1Pressed = new Texture(Gdx.files.internal("Botones/moshiover.png"));
         ImageButton scenario1 = new ImageButton(new TextureRegionDrawable(new TextureRegion(scenario1Texture)), new TextureRegionDrawable(new TextureRegion(scenario1Pressed)));
+        if(scenario1.isChecked()){
+            sound.play(.5f);
+        }
         scenario1.addListener(new ActorGestureListener() {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
@@ -68,6 +74,9 @@ public class ScenariosScreen extends ScreenAdapter {
         scenario2Texture = new Texture(Gdx.files.internal("Botones/Pasele.png"));
         scenario2Pressed = new Texture(Gdx.files.internal("Botones/paseleama.png"));
         ImageButton scenario2 = new ImageButton(new TextureRegionDrawable(new TextureRegion(scenario2Texture)), new TextureRegionDrawable(new TextureRegion(scenario2Pressed)));
+        if(scenario2.isChecked()){
+            sound.play(.5f);
+        }
         scenario2.addListener(new ActorGestureListener() {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
@@ -80,6 +89,9 @@ public class ScenariosScreen extends ScreenAdapter {
         scenario3Texture= new Texture(Gdx.files.internal("Botones/kamikaze.png"));
         scenario3Pressed = new Texture(Gdx.files.internal("Botones/kamikazero.png"));
         ImageButton scenario3 = new ImageButton(new TextureRegionDrawable(new TextureRegion(scenario3Texture)), new TextureRegionDrawable(new TextureRegion(scenario3Pressed)));
+        if(scenario3.isPressed()){
+            sound.play(.5f);
+        }
         scenario3.addListener(new ActorGestureListener() {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
@@ -151,6 +163,7 @@ public class ScenariosScreen extends ScreenAdapter {
         menuTexture.dispose();
         menuPressed.dispose();
         music.dispose();
+        sound.dispose();
     }
 
     private void clearScreen() {
