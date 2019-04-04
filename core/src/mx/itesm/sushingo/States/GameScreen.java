@@ -5,21 +5,22 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-
 import java.util.Random;
-
-import mx.itesm.sushingo.Hud;
 import mx.itesm.sushingo.Sprites.BackGround;
 import mx.itesm.sushingo.Sprites.Items;
 import mx.itesm.sushingo.Sprites.Sam;
@@ -29,29 +30,31 @@ public class GameScreen extends ScreenAdapter {
     private static final float WORLD_HEIGHT = 720;
     private Game game;
     private Viewport viewport;
-
     private ShapeRenderer shapeRenderer;
     private SpriteBatch batch;
-
     private Music music;
-
     private Stage stage;
     private OrthographicCamera camera;
-
     private Sam sam;
-    private Hud hud;
-
     private static final float GAP_BETWEEN_OBSTACLES = 40f;
-    private float[] PADS = {0,97,194,291,388, 485, 582, 679};
-    private Array<Items> items = new Array<Items>();
-    private int lifes = 3;
-    private Texture arroz, dango, naruto, chilew;
-
+    private float[] PADS = {0, 97, 194, 291, 388, 485, 582, 679};
+    private Array<Items> badItems = new Array<Items>();
+    private Array<Items> goodItems = new Array<Items>();
+    private Texture arroz, salsa, naruto, cuchillo;
+    private static Integer lives;
+    private static Integer score;
+    private Label livesLabel;
+    private static Label scoreLabel;
+    private Label samLabel;
+    private Label scoreL;
+    private Sound hitSound;
+    private Sound powerSound;
 
     public GameScreen(Game game) {
+        lives = 3;
+        score = 0;
         this.game = game;
     }
-
 
     @Override
     public void show() {
@@ -66,15 +69,18 @@ public class GameScreen extends ScreenAdapter {
 
         shapeRenderer = new ShapeRenderer();
         batch = new SpriteBatch();
-        hud = new Hud(batch);
 
         sam = new Sam();
         sam.setPosition(WORLD_WIDTH / 4, WORLD_HEIGHT / 2);
 
         arroz = new Texture(Gdx.files.internal("Items/arrozc.png"));
         naruto = new Texture(Gdx.files.internal("Items/naruto.png"));
-        chilew = new Texture(Gdx.files.internal("Items/chile2.png"));
-        dango = new Texture(Gdx.files.internal("Items/dango.png"));
+        cuchillo = new Texture(Gdx.files.internal("Items/cuchillo.png"));
+        salsa = new Texture(Gdx.files.internal("Items/salsa.png"));
+
+        powerSound = Gdx.audio.newSound(Gdx.files.internal("Audio/power.mp3"));
+        hitSound = Gdx.audio.newSound(Gdx.files.internal("Audio/Hit.mp3"));
+
 
 
         Array<Texture> textures = new Array<Texture>();
@@ -94,6 +100,24 @@ public class GameScreen extends ScreenAdapter {
         music.setLooping(true);
         music.setVolume(.3f);
         music.play();
+
+        Table table = new Table();
+        table.top();
+        table.setFillParent(true);
+
+        livesLabel = new Label(String.format("%03d", lives), new Label.LabelStyle(new BitmapFont(), Color.BLACK));
+        scoreLabel = new Label(String.format("%06d", score), new Label.LabelStyle(new BitmapFont(), Color.BLACK));
+        scoreL = new Label("SCORE", new Label.LabelStyle(new BitmapFont(), Color.BLACK));
+        samLabel = new Label("LIVES", new Label.LabelStyle(new BitmapFont(), Color.BLACK));
+
+
+        table.add(samLabel).expandX().padTop(10f);
+        table.add(scoreL).expandX().padTop(10f);
+        table.row();
+        table.add(livesLabel).expandX();
+        table.add(scoreLabel);
+
+        stage.addActor(table);
     }
 
     private void updateSam(float delta) {
@@ -114,7 +138,6 @@ public class GameScreen extends ScreenAdapter {
         }
     }
 
-
     @Override
     public void render(float delta) {
         super.render(delta);
@@ -126,23 +149,27 @@ public class GameScreen extends ScreenAdapter {
     private void draw() {
         stage.act();
         stage.draw();
-        hud = new Hud(batch);
         batch.setProjectionMatrix(camera.projection);
         batch.setTransformMatrix(camera.view);
         batch.begin();
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
         sam.draw(batch);
-        drawItems();
+        drawBadItems();
+        drawGoodItems();
         batch.end();
         shapeRenderer.end();
-        batch.setProjectionMatrix(hud.stage.getCamera().combined);
-        hud.stage.draw();
     }
 
-    private void drawItems() {
+    private void drawBadItems() {
 
-        for (Items item : items){
-            item.draw(batch);
+        for (Items badItem : badItems) {
+            badItem.draw(batch);
+        }
+    }
+
+    private void drawGoodItems(){
+        for (Items goodItem : goodItems){
+            goodItem.draw(batch);
         }
     }
 
@@ -157,103 +184,160 @@ public class GameScreen extends ScreenAdapter {
     public void dispose() {
         stage.dispose();
         music.dispose();
-        hud.dispose();
         sam.dispose();
         arroz.dispose();
-        chilew.dispose();
-        dango.dispose();
+        salsa.dispose();
+        cuchillo.dispose();
         naruto.dispose();
         batch.dispose();
-    }
-
-    public Hud getHud() {
-        return hud;
+        powerSound.dispose();
+        hitSound.dispose();
     }
 
     public void update(float delta) {
         updateSam(delta);
-        updateItems(delta);
-        if (checkForCollision()){ restLife();}
-    }
+        updateBadItems(delta);
+        updateGoodItems(delta);
 
-    private void restLife() {
-        if (lifes<=0)restart();
-        else {lifes--;
-        sam.setHit(true);
+        if (checkForBadCollision()) {
+            hitSound.play(6);
+            restLives(1);
+        }
+        if (checkForGoodCollision()) {
+            powerSound.play(6);
+            addScore(10);
         }
     }
 
     private void restart() {
         sam.setPosition(WORLD_WIDTH / 4, WORLD_HEIGHT / 2);
-        items.clear();
-        lifes = 3;
+        badItems.clear();
+        goodItems.clear();
+        lives = 3;
     }
 
-    private void updateItems(float delta) {
-        for (Items item : items){
+    private void updateBadItems(float delta) {
+        for (Items item : badItems) {
             item.update(delta);
         }
-        checkIfNewItemNeeded();
-        removeItemsIfPassed();
+        checkIfNewBadItemNeeded();
+        removeBadItemsIfPassed();
     }
 
-    private void createNewObstacle(){
+    private void createNewBadItem() {
         Random rnd = new Random();
         int RandomPad = rnd.nextInt(8);
-        int RandomTexture = rnd.nextInt(4);
+        int RandomTexture = rnd.nextInt(3);
+        Items newObstacle;
+        if (RandomTexture == 1) {
+            newObstacle = new Items(salsa);
+            float y = PADS[RandomPad];
+            newObstacle.setPosition(WORLD_WIDTH + Items.WIDTH, y + newObstacle.WIDTH / 2);
+            badItems.add(newObstacle);
+
+        } else if (RandomTexture == 2) {
+            newObstacle = new Items(cuchillo);
+            float y = PADS[RandomPad];
+            newObstacle.setPosition(WORLD_WIDTH + Items.WIDTH, y + newObstacle.WIDTH / 2);
+            badItems.add(newObstacle);
+        }
+    }
+
+    private void checkIfNewBadItemNeeded() {
+        if (badItems.size == 0) {
+            createNewBadItem();
+        } else {
+            Items item = badItems.peek();
+            if (item.getX() < WORLD_WIDTH - GAP_BETWEEN_OBSTACLES) {
+                createNewBadItem();
+            }
+        }
+    }
+
+    private void removeBadItemsIfPassed() {
+        if (badItems.size > 0) {
+            Items firstObstacle = badItems.first();
+            if (firstObstacle.getX() < -Items.WIDTH) {
+                badItems.removeValue(firstObstacle, true);
+            }
+        }
+    }
+
+    private boolean checkForBadCollision() {
+        for (Items obstacle : badItems) {
+            if (obstacle.isSamColliding(sam) && (!sam.isHit())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static void addScore(int value) {
+        score += value;
+        scoreLabel.setText(String.format("%06d", score));
+    }
+
+    public void restLives(int value) {
+        if(lives <= 0){
+            restart();
+        }
+        else {
+            lives -= value;
+            scoreLabel.setText(String.format("%03d", lives));
+        }
+    }
+
+    private void updateGoodItems(float delta) {
+        for (Items item : goodItems) {
+            item.update(delta);
+        }
+        checkIfNewGoodItemNeeded();
+        removeGoodItemsIfPassed();
+    }
+
+    private void createNewGoodItem() {
+        Random rnd = new Random();
+        int RandomPad = rnd.nextInt(8);
+        int RandomTexture = rnd.nextInt(3);
         Items newObstacle;
 
-        if(RandomTexture ==1){
+        if (RandomTexture == 1) {
             newObstacle = new Items(arroz);
             float y = PADS[RandomPad];
-            newObstacle.setPosition(WORLD_WIDTH + Items.WIDTH,  y + newObstacle.WIDTH/2);
-            items.add(newObstacle);
-        }
-        else if(RandomTexture == 2){
-            newObstacle = new Items(chilew);
-            float y = PADS[RandomPad];
-            newObstacle.setPosition(WORLD_WIDTH + Items.WIDTH,  y + newObstacle.WIDTH/2);
-            items.add(newObstacle);
-        }
+            newObstacle.setPosition(WORLD_WIDTH + Items.WIDTH, y + newObstacle.WIDTH / 2);
+            goodItems.add(newObstacle);
 
-        else if(RandomTexture == 3){
-            newObstacle = new Items(dango);
-            float y = PADS[RandomPad];
-            newObstacle.setPosition(WORLD_WIDTH + Items.WIDTH,  y + newObstacle.WIDTH/2);
-            items.add(newObstacle);
-        }
-        else if(RandomTexture == 4){
+        } else if (RandomTexture == 2) {
             newObstacle = new Items(naruto);
             float y = PADS[RandomPad];
-            newObstacle.setPosition(WORLD_WIDTH + Items.WIDTH,  y + newObstacle.WIDTH/2);
-            items.add(newObstacle);
+            newObstacle.setPosition(WORLD_WIDTH + Items.WIDTH, y + newObstacle.WIDTH / 2);
+            goodItems.add(newObstacle);
         }
-
     }
 
-    private void checkIfNewItemNeeded() {
-        if(items.size==0){
-            createNewObstacle();
-        }else{
-            Items item = items.peek();
-            if(item.getX()<WORLD_WIDTH-GAP_BETWEEN_OBSTACLES){
-                createNewObstacle();
+    private void checkIfNewGoodItemNeeded() {
+        if (goodItems.size == 0) {
+            createNewGoodItem();
+        } else {
+            Items item = goodItems.peek();
+            if (item.getX() < WORLD_WIDTH - GAP_BETWEEN_OBSTACLES) {
+                createNewGoodItem();
             }
         }
     }
 
-    private void removeItemsIfPassed() {
-        if(items.size > 0){
-            Items firstObstacle = items.first();
-            if(firstObstacle.getX() < -Items.WIDTH){
-                items.removeValue(firstObstacle, true);
+    private void removeGoodItemsIfPassed() {
+        if (goodItems.size > 0) {
+            Items firstObstacle = goodItems.first();
+            if (firstObstacle.getX() < -Items.WIDTH) {
+                goodItems.removeValue(firstObstacle, true);
             }
         }
     }
 
-    private  boolean checkForCollision(){
-        for (Items obstacle : items){
-            if (obstacle.isSamColliding(sam)&& (!sam.isHit())){
+    private boolean checkForGoodCollision() {
+        for (Items obstacle : goodItems) {
+            if (obstacle.isSamColliding(sam) && (!sam.isHit())) {
                 return true;
             }
         }
@@ -264,7 +348,5 @@ public class GameScreen extends ScreenAdapter {
         Gdx.gl.glClearColor(Color.BLACK.r, Color.BLACK.g, Color.BLACK.b, Color.BLACK.a);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
     }
-
-
 }
 

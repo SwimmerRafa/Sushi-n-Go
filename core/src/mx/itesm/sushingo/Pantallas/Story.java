@@ -3,6 +3,7 @@ package mx.itesm.sushingo.Pantallas;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -27,6 +28,7 @@ public class Story extends ScreenAdapter {
     private Texture story5;
     private Texture story6;
     private Texture story7;
+    private Music music;
 
     public Story(Game game){
         this.game = game;
@@ -76,6 +78,11 @@ public class Story extends ScreenAdapter {
         image2.addAction(sequence(delay(4),fadeIn(2), fadeOut(2)));
         stage.addActor(image1);
         image1.addAction(sequence(fadeIn(2), fadeOut(2)));
+
+        music = Gdx.audio.newMusic(Gdx.files.internal("Audio/Story.mp3"));
+        music.setLooping(true);
+        music.setVolume(.3f);
+        music.play();
     }
 
     @Override
@@ -96,6 +103,7 @@ public class Story extends ScreenAdapter {
     public void dispose() {
         super.dispose();
         stage.dispose();
+        music.dispose();
     }
 
     private void clearScreen() {

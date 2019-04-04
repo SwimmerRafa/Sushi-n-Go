@@ -34,7 +34,7 @@ public class Sam {
         texture = new Texture(Gdx.files.internal("Personajes/pez.png"));
         birdAnimation = new Animation(new TextureRegion(texture), 3, 0.5f);
         bounds = new Rectangle(x, y, texture.getWidth()/3, texture.getHeight());
-        flap = Gdx.audio.newSound(Gdx.files.internal("Audio/Hit.mp3"));
+        flap = Gdx.audio.newSound(Gdx.files.internal("Audio/sam.wav"));
         colliding = false;
         collisionCircle = new Circle(x, y, COLLISION_RADIUS);
     }
@@ -43,6 +43,7 @@ public class Sam {
         birdAnimation.update(dt);
         ySpeed -= DIVE_ACCEL;
         setPosition(x, y + ySpeed);
+
         if (isHit()){
             hitTimer -= dt;
             if(hitTimer==0){
@@ -59,7 +60,7 @@ public class Sam {
     public void jump(){
         ySpeed = FLY_ACCEL;
         setPosition(x,y+ySpeed);
-        flap.play(0.5f);
+        flap.play(0.8f);
     }
 
     public void dispose(){
