@@ -22,7 +22,7 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import mx.itesm.sushingo.SushinGo;
 
 public class CharactersScreen extends ScreenAdapter {
-    private final Game game;
+    private final SushinGo game;
     private static final float WORLD_WIDTH = 1280;
     private static final float WORLD_HEIGHT = 720;
 
@@ -43,7 +43,7 @@ public class CharactersScreen extends ScreenAdapter {
     private Table table;
     private Music music;
 
-    public CharactersScreen(Game game) {
+    public CharactersScreen(SushinGo game) {
         this.game = game;
     }
 

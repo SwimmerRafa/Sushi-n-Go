@@ -18,10 +18,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 import mx.itesm.sushingo.States.GameScreen;
+import mx.itesm.sushingo.States.GameScreen2;
+import mx.itesm.sushingo.States.LoadingScreen;
+import mx.itesm.sushingo.States.LoadingScreen2;
 import mx.itesm.sushingo.SushinGo;
 
 public class ScenariosScreen extends ScreenAdapter {
-    private final Game game;
+    private final SushinGo game;
     private static final float WORLD_WIDTH = 1280;
     private static final float WORLD_HEIGHT = 720;
 
@@ -41,7 +44,7 @@ public class ScenariosScreen extends ScreenAdapter {
     private Music music;
     private Sound sound;
 
-    public ScenariosScreen(Game game) {
+    public ScenariosScreen(SushinGo game) {
         this.game = game;
     }
 
@@ -66,7 +69,7 @@ public class ScenariosScreen extends ScreenAdapter {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 super.tap(event, x, y, count, button);
-                game.setScreen(new GameScreen(game));
+                game.setScreen(new LoadingScreen(game));
                 dispose();
             }
         });
@@ -81,7 +84,7 @@ public class ScenariosScreen extends ScreenAdapter {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 super.tap(event, x, y, count, button);
-                game.setScreen(new GameScreen(game));
+                game.setScreen(new LoadingScreen2(game));
                 dispose();
             }
         });

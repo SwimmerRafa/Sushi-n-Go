@@ -18,7 +18,7 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.run;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
 
 public class TransitionScreen extends ScreenAdapter {
-    private final Game game;
+    private final SushinGo game;
     private static final float WORLD_WIDTH = 1280;
     private static final float WORLD_HEIGHT = 720;
     private Stage stage;
@@ -27,7 +27,7 @@ public class TransitionScreen extends ScreenAdapter {
 
 
 
-    public TransitionScreen(Game game){
+    public TransitionScreen(SushinGo game){
         this.game = game;
     }
 
