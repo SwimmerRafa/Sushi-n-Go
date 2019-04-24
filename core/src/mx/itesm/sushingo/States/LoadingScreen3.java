@@ -2,8 +2,6 @@ package mx.itesm.sushingo.States;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -15,7 +13,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import mx.itesm.sushingo.SushinGo;
 
-public class LoadingScreen extends ScreenAdapter {
+public class LoadingScreen3 extends ScreenAdapter {
     private static final float WORLD_WIDTH = 1280;
     private static final float WORLD_HEIGHT = 720;
     private static final float PROGRESS_BAR_WIDTH = 500;
@@ -26,7 +24,7 @@ public class LoadingScreen extends ScreenAdapter {
     private float progress = 0;
     private final SushinGo game;
 
-    public LoadingScreen(SushinGo game) {
+    public LoadingScreen3(SushinGo game) {
         this.game = game;
     }
 
@@ -43,22 +41,17 @@ public class LoadingScreen extends ScreenAdapter {
         viewport = new FitViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
         shapeRenderer = new ShapeRenderer();
 
+
         game.getAssetManager().load("Personajes/pez.png", Texture.class);
+        //
+
         game.getAssetManager().load("play.png", Texture.class);
         game.getAssetManager().load("pause.png", Texture.class);
-        game.getAssetManager().load("Audio/Mo_Shio.mp3", Music.class);
-        game.getAssetManager().load("Items/arrozc.png", Texture.class);
-        game.getAssetManager().load("Items/naruto.png", Texture.class);
-        game.getAssetManager().load("Items/cuchillo.png", Texture.class);
-        game.getAssetManager().load("Items/salsa.png", Texture.class);
-        game.getAssetManager().load("Audio/power.mp3", Sound.class);
-        game.getAssetManager().load("Audio/Hit.mp3", Sound.class);
 
     }
 
 
     public void render(float delta) {
-        super.render(delta);
         update();
         clearScreen();
         draw();
@@ -71,7 +64,7 @@ public class LoadingScreen extends ScreenAdapter {
 
     private void update() {
         if (game.getAssetManager().update()) {
-            game.setScreen(new GameScreen(game));
+            game.setScreen(new GameScreen3(game));
         } else {
             progress = game.getAssetManager().getProgress();
         }
@@ -92,5 +85,3 @@ public class LoadingScreen extends ScreenAdapter {
         shapeRenderer.end();
     }
 }
-
-

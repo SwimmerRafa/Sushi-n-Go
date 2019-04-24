@@ -39,6 +39,7 @@ public class Items {
     }
 
     public boolean isSamColliding(Sam sam){
+
         Circle samCollisionCircle = sam.getCollisionCircle();
         return Intersector.overlaps(samCollisionCircle, collisionRectangle);
     }

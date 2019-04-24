@@ -46,7 +46,7 @@ public class Sam {
 
         if (isHit()){
             hitTimer -= dt;
-            if(hitTimer==0){
+            if(hitTimer<=0){
                 isHit = false;
                 hitTimer = 1;
             }

@@ -186,6 +186,12 @@ public class GameScreen2 extends ScreenAdapter {
         if(state == STATE.PLAYING) {
             super.render(delta);
             update(delta);
+            music.play();
+            music.setLooping(true);
+            music.setVolume(.3f);
+        }
+        if(state == STATE.PAUSED){
+            music.pause();
         }
         clearScreen();
         draw();
@@ -318,6 +324,7 @@ public class GameScreen2 extends ScreenAdapter {
     private boolean checkForBadCollision() {
         for (Items obstacle : badItems) {
             if (obstacle.isSamColliding(sam) && (!sam.isHit())) {
+                sam.setHit(true);
                 return true;
             }
         }
@@ -390,6 +397,7 @@ public class GameScreen2 extends ScreenAdapter {
     private boolean checkForGoodCollision() {
         for (Items obstacle : goodItems) {
             if (obstacle.isSamColliding(sam) && (!sam.isHit())) {
+                sam.setHit(true);
                 return true;
             }
         }

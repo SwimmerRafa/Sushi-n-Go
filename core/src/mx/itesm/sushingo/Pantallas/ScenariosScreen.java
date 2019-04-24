@@ -21,6 +21,7 @@ import mx.itesm.sushingo.States.GameScreen;
 import mx.itesm.sushingo.States.GameScreen2;
 import mx.itesm.sushingo.States.LoadingScreen;
 import mx.itesm.sushingo.States.LoadingScreen2;
+import mx.itesm.sushingo.States.LoadingScreen3;
 import mx.itesm.sushingo.SushinGo;
 
 public class ScenariosScreen extends ScreenAdapter {
@@ -99,7 +100,7 @@ public class ScenariosScreen extends ScreenAdapter {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 super.tap(event, x, y, count, button);
-                game.setScreen(new GameScreen(game));
+                game.setScreen(new LoadingScreen3(game));
                 dispose();
             }
         });

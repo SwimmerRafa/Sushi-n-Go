@@ -32,7 +32,7 @@ import mx.itesm.sushingo.Sprites.Items;
 import mx.itesm.sushingo.Sprites.Sam;
 import mx.itesm.sushingo.SushinGo;
 
-public class GameScreen extends ScreenAdapter {
+public class GameScreen3 extends ScreenAdapter {
     private static final float WORLD_WIDTH = 1280;
     private static final float WORLD_HEIGHT = 720;
     private Viewport viewport;
@@ -68,7 +68,7 @@ public class GameScreen extends ScreenAdapter {
     }
     private STATE state = STATE.PLAYING;
 
-    public GameScreen(SushinGo game) {
+    public GameScreen3(SushinGo game) {
         lives = 3;
         score = 0;
         this.game = game;
@@ -104,7 +104,7 @@ public class GameScreen extends ScreenAdapter {
 
         Array<Texture> textures = new Array<Texture>();
         for (int i = 1; i <= 3; i++) {
-            textures.add(new Texture(Gdx.files.internal("Ejemplo/fondo" + i + ".png")));
+            textures.add(new Texture(Gdx.files.internal("Nivel3/fondo" + i + ".png")));
             textures.get(textures.size - 1).setWrap(Texture.TextureWrap.MirroredRepeat, Texture.TextureWrap.MirroredRepeat);
         }
 
@@ -146,7 +146,7 @@ public class GameScreen extends ScreenAdapter {
                 }else{
                     state = STATE.PLAYING;
                 }
-            }
+            };
         });
 
         stageUI.addActor(pauseButton);
@@ -186,6 +186,12 @@ public class GameScreen extends ScreenAdapter {
         if(state == STATE.PLAYING) {
             super.render(delta);
             update(delta);
+            music.play();
+            music.setLooping(true);
+            music.setVolume(.3f);
+        }
+        if(state == STATE.PAUSED){
+            music.pause();
         }
         clearScreen();
         draw();
