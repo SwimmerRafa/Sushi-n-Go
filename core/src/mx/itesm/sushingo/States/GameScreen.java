@@ -2,6 +2,7 @@ package mx.itesm.sushingo.States;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
@@ -73,17 +74,15 @@ public class GameScreen extends ScreenAdapter {
     private Stage stagePause;
     private Texture reanu, reanuPress, menuPress, menu, reini, reiniPress;
     private Table table2;
-
     private enum STATE {
         PLAYING, PAUSED
     }
-    private STATE state;
+    private STATE state = STATE.PLAYING;
 
     public GameScreen(SushinGo game) {
         lives = 3;
         score = 0;
         this.game = game;
-        state = STATE.PLAYING;
     }
 
 
@@ -125,8 +124,6 @@ public class GameScreen extends ScreenAdapter {
         parallaxBackground.setSpeed(2);
         stage.addActor(parallaxBackground);
 
-        Gdx.input.setInputProcessor(stage);
-
         music = Gdx.audio.newMusic(Gdx.files.internal("Audio/Mo_Shio.mp3"));
         music.setLooping(true);
         music.setVolume(.3f);
@@ -160,11 +157,14 @@ public class GameScreen extends ScreenAdapter {
         reanu = new Texture(Gdx.files.internal("Botones/reanudarsushi.png"));
 
         ImageButton reanudar = new ImageButton(new TextureRegionDrawable(new TextureRegion(reanu)));
-        reanudar.addListener(new ActorGestureListener() {
+        reanudar.addListener(new ClickListener() {
             @Override
-            public void tap(InputEvent event, float x, float y, int count, int button) {
-                super.tap(event, x, y, count, button);
-                state = STATE.PLAYING;
+            public void clicked(InputEvent event, float x, float y) {
+                if(state==STATE.PLAYING){
+                    state = STATE.PAUSED;
+                }else{
+                    state = STATE.PLAYING;
+                }
             }
         });
 
@@ -173,16 +173,17 @@ public class GameScreen extends ScreenAdapter {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 super.tap(event, x, y, count, button);
+                music.stop();
                 game.setScreen(new GameScreen(game));
-                dispose();
             }
         });
 
-        ImageButton mainMenu = new ImageButton(new TextureRegionDrawable(new TextureRegion(menu)));
+        ImageButton mainMenu = new ImageButton(new TextureRegionDrawable(menu));
         mainMenu.addListener(new ActorGestureListener() {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 super.tap(event, x, y, count, button);
+                music.stop();
                 game.setScreen(new MainMenu(game));
                 dispose();
             }
@@ -203,8 +204,6 @@ public class GameScreen extends ScreenAdapter {
         table.padBottom(80f);
         stagePause.addActor(table2);
 
-        Gdx.input.setInputProcessor(stagePause);
-
         pauseButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -216,9 +215,13 @@ public class GameScreen extends ScreenAdapter {
             }
         });
 
-        stageUI.addActor(pauseButton);
-        Gdx.input.setInputProcessor(stageUI);
+        InputMultiplexer multiplexer = new InputMultiplexer();
+        multiplexer.addProcessor(stage);
+        multiplexer.addProcessor(stageUI);
+        multiplexer.addProcessor(stagePause);
+        Gdx.input.setInputProcessor(multiplexer);
 
+        stageUI.addActor(pauseButton);
 
         table.add(samLabel).expandX().padTop(10f);
         table.add(scoreL).expandX().padTop(10f);
@@ -400,6 +403,7 @@ public class GameScreen extends ScreenAdapter {
 
     public void addScore(int value) {
         if (score == 50){
+            music.stop();
             game.setScreen(new WinScreen(game));
         }
         else {
@@ -410,6 +414,7 @@ public class GameScreen extends ScreenAdapter {
 
     public void restLives(int value) {
         if(lives <=1){
+            music.stop();
             game.setScreen(new GameOver(game));
         }
         else {

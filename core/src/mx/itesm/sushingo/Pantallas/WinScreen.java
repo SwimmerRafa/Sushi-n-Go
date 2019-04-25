@@ -97,8 +97,6 @@ public class WinScreen extends ScreenAdapter {
         table.row();
         table.row();
         table.add(menu).padTop(20f).right().expandX();
-        table.padBottom(0f);
-
         stage.addActor(table);
 
 
