@@ -325,6 +325,7 @@ public class GameScreen2 extends ScreenAdapter {
         for (Items obstacle : badItems) {
             if (obstacle.isSamColliding(sam) && (!sam.isHit())) {
                 sam.setHit(true);
+                badItems.removeValue(obstacle, true);
                 return true;
             }
         }
@@ -398,6 +399,7 @@ public class GameScreen2 extends ScreenAdapter {
         for (Items obstacle : goodItems) {
             if (obstacle.isSamColliding(sam) && (!sam.isHit())) {
                 sam.setHit(true);
+                goodItems.removeValue(obstacle, true);
                 return true;
             }
         }

@@ -1,6 +1,5 @@
 package mx.itesm.sushingo.States;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
@@ -20,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
@@ -27,6 +27,10 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import java.util.Random;
+
+import mx.itesm.sushingo.Pantallas.GameOver;
+import mx.itesm.sushingo.Pantallas.MainMenu;
+import mx.itesm.sushingo.Pantallas.WinScreen;
 import mx.itesm.sushingo.Sprites.BackGround;
 import mx.itesm.sushingo.Sprites.Items;
 import mx.itesm.sushingo.Sprites.Sam;
@@ -63,15 +67,23 @@ public class GameScreen extends ScreenAdapter {
     private OrthographicCamera cameraHUD;
     private Viewport viewportHUD;
     private Stage stageUI;
+
+    private OrthographicCamera cameraPause;
+    private Viewport viewportPause;
+    private Stage stagePause;
+    private Texture reanu, reanuPress, menuPress, menu, reini, reiniPress;
+    private Table table2;
+
     private enum STATE {
         PLAYING, PAUSED
     }
-    private STATE state = STATE.PLAYING;
+    private STATE state;
 
     public GameScreen(SushinGo game) {
         lives = 3;
         score = 0;
         this.game = game;
+        state = STATE.PLAYING;
     }
 
 
@@ -137,6 +149,61 @@ public class GameScreen extends ScreenAdapter {
         pauseTRDrawable = new TextureRegionDrawable(new TextureRegion((Texture) game.getAssetManager().get("pause.png")));
         pauseButton = new ImageButton(pauseTRDrawable,pauseTRDrawable,playTRDrawable);
         pauseButton.setPosition(WORLD_WIDTH - pauseButton.getWidth()*1.2f, WORLD_HEIGHT - pauseButton.getHeight()*1.2f);
+
+        //Pause
+        cameraPause = new OrthographicCamera();
+        viewportPause = new FitViewport(WORLD_WIDTH, WORLD_HEIGHT, cameraPause);
+        cameraPause.update();
+        stagePause = new Stage(viewportPause);
+        reini = new Texture(Gdx.files.internal("Botones/reiniciarsush.png"));
+        menu = new Texture(Gdx.files.internal("Botones/menusushi.png"));
+        reanu = new Texture(Gdx.files.internal("Botones/reanudarsushi.png"));
+
+        ImageButton reanudar = new ImageButton(new TextureRegionDrawable(new TextureRegion(reanu)));
+        reanudar.addListener(new ActorGestureListener() {
+            @Override
+            public void tap(InputEvent event, float x, float y, int count, int button) {
+                super.tap(event, x, y, count, button);
+                state = STATE.PLAYING;
+            }
+        });
+
+        ImageButton reiniciar = new ImageButton(new TextureRegionDrawable(new TextureRegion(reini)));
+        reiniciar.addListener(new ActorGestureListener() {
+            @Override
+            public void tap(InputEvent event, float x, float y, int count, int button) {
+                super.tap(event, x, y, count, button);
+                game.setScreen(new GameScreen(game));
+                dispose();
+            }
+        });
+
+        ImageButton mainMenu = new ImageButton(new TextureRegionDrawable(new TextureRegion(menu)));
+        mainMenu.addListener(new ActorGestureListener() {
+            @Override
+            public void tap(InputEvent event, float x, float y, int count, int button) {
+                super.tap(event, x, y, count, button);
+                game.setScreen(new MainMenu(game));
+                dispose();
+            }
+        });
+
+        table2 = new Table();
+        table2.row();
+        table2.setFillParent(true);
+        table2.add(reanudar).center().expandX().padTop(20f);
+        table2.row();
+        table2.row();
+        table2.row();
+        table2.add(reiniciar).center().expandX().padTop(20f);
+        table2.row();
+        table2.row();
+        table2.row();
+        table2.add(mainMenu).center().expandX().padTop(20f);
+        table.padBottom(80f);
+        stagePause.addActor(table2);
+
+        Gdx.input.setInputProcessor(stagePause);
 
         pauseButton.addListener(new ClickListener() {
             @Override
@@ -204,6 +271,9 @@ public class GameScreen extends ScreenAdapter {
         batch.end();
         shapeRenderer.end();
         stageUI.draw();
+        if(state == STATE.PAUSED){
+            stagePause.draw();
+        }
     }
 
     private void drawBadItems() {
@@ -224,8 +294,8 @@ public class GameScreen extends ScreenAdapter {
         super.resize(width, height);
         viewport.update(width, height);
         viewportHUD.update(width, height);
+        viewportPause.update(width,height);
         stage.getViewport().update(width, height);
-
     }
 
     @Override
@@ -240,6 +310,8 @@ public class GameScreen extends ScreenAdapter {
         batch.dispose();
         powerSound.dispose();
         hitSound.dispose();
+        stageUI.dispose();
+        stagePause.dispose();
     }
 
     public void update(float delta) {
@@ -319,20 +391,26 @@ public class GameScreen extends ScreenAdapter {
         for (Items obstacle : badItems) {
             if (obstacle.isSamColliding(sam) && (!sam.isHit())) {
                 sam.setHit(true);
+                badItems.removeValue(obstacle, true);
                 return true;
             }
         }
         return false;
     }
 
-    public static void addScore(int value) {
-        score += value;
-        scoreLabel.setText(String.format("%06d", score));
+    public void addScore(int value) {
+        if (score == 50){
+            game.setScreen(new WinScreen(game));
+        }
+        else {
+            score += value;
+            scoreLabel.setText(String.format("%06d", score));
+        }
     }
 
     public void restLives(int value) {
-        if(lives <= 0){
-            restart();
+        if(lives <=1){
+            game.setScreen(new GameOver(game));
         }
         else {
             lives -= value;
@@ -392,6 +470,7 @@ public class GameScreen extends ScreenAdapter {
         for (Items obstacle : goodItems) {
             if (obstacle.isSamColliding(sam) && (!sam.isHit())) {
                 sam.setHit(true);
+                goodItems.removeValue(obstacle, true);
                 return true;
             }
         }
@@ -406,4 +485,3 @@ public class GameScreen extends ScreenAdapter {
         return assetManager;
     }
 }
-

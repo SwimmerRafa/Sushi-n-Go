@@ -53,6 +53,7 @@ public class LoadingScreen extends ScreenAdapter {
         game.getAssetManager().load("Items/salsa.png", Texture.class);
         game.getAssetManager().load("Audio/power.mp3", Sound.class);
         game.getAssetManager().load("Audio/Hit.mp3", Sound.class);
+        game.getAssetManager().load("pause.png", Texture.class);
 
     }
 
