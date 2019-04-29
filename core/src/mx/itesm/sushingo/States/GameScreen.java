@@ -17,6 +17,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -57,8 +58,8 @@ public class GameScreen extends ScreenAdapter {
     private static Integer score;
     private Label livesLabel;
     private static Label scoreLabel;
-    private Label samLabel;
-    private Label scoreL;
+    private Texture samLabel;
+    private Texture scoreL;
     private Sound hitSound;
     private Sound powerSound;
     private final AssetManager assetManager = new AssetManager();
@@ -121,8 +122,12 @@ public class GameScreen extends ScreenAdapter {
 
         BackGround parallaxBackground = new BackGround(textures, WORLD_WIDTH, WORLD_HEIGHT);
         parallaxBackground.setSize(WORLD_WIDTH, WORLD_HEIGHT);
-        parallaxBackground.setSpeed(2);
+        parallaxBackground.setSpeed(0);
         stage.addActor(parallaxBackground);
+
+        if (state == STATE.PLAYING){
+            parallaxBackground.setSpeed(2);
+        }
 
         music = Gdx.audio.newMusic(Gdx.files.internal("Audio/Mo_Shio.mp3"));
         music.setLooping(true);
@@ -133,10 +138,20 @@ public class GameScreen extends ScreenAdapter {
         table.top();
         table.setFillParent(true);
 
-        livesLabel = new Label(String.format("%03d", lives), new Label.LabelStyle(new BitmapFont(), Color.BLACK));
-        scoreLabel = new Label(String.format("%06d", score), new Label.LabelStyle(new BitmapFont(), Color.BLACK));
-        scoreL = new Label("SCORE", new Label.LabelStyle(new BitmapFont(), Color.BLACK));
-        samLabel = new Label("LIVES", new Label.LabelStyle(new BitmapFont(), Color.BLACK));
+        BitmapFont bitmapFont = new BitmapFont(Gdx.files.internal("label.fnt"));
+
+        String livesString = String.format("%03d", lives);
+        String scoreString = String.format("%06d", score);
+
+        BitmapFont bitmapFont1 = new BitmapFont();
+        bitmapFont1.getData().setScale(1.8f);
+        livesLabel = new Label(String.format("%03d", lives), new Label.LabelStyle(bitmapFont1, Color.BLACK));
+        scoreLabel = new Label(String.format("%06d", score), new Label.LabelStyle(bitmapFont1, Color.BLACK));
+        scoreL = new Texture(Gdx.files.internal("puntaje.png"));
+        samLabel = new Texture(Gdx.files.internal("vidas.png"));
+
+        Image imageScore = new Image(scoreL);
+        Image imageLives = new Image(samLabel);
 
         cameraHUD = new OrthographicCamera();
         viewportHUD = new FitViewport(WORLD_WIDTH,WORLD_HEIGHT,cameraHUD);
@@ -223,8 +238,8 @@ public class GameScreen extends ScreenAdapter {
 
         stageUI.addActor(pauseButton);
 
-        table.add(samLabel).expandX().padTop(10f);
-        table.add(scoreL).expandX().padTop(10f);
+        table.add(imageScore).expandX().padTop(10f);
+        table.add(imageLives).expandX().padTop(10f);
         table.row();
         table.add(livesLabel).expandX();
         table.add(scoreLabel);
@@ -274,6 +289,7 @@ public class GameScreen extends ScreenAdapter {
         batch.end();
         shapeRenderer.end();
         stageUI.draw();
+
         if(state == STATE.PAUSED){
             stagePause.draw();
         }

@@ -1,8 +1,8 @@
 package mx.itesm.sushingo.States;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
@@ -17,9 +17,11 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
@@ -27,6 +29,10 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import java.util.Random;
+
+import mx.itesm.sushingo.Pantallas.GameOver;
+import mx.itesm.sushingo.Pantallas.MainMenu;
+import mx.itesm.sushingo.Pantallas.WinScreen;
 import mx.itesm.sushingo.Sprites.BackGround;
 import mx.itesm.sushingo.Sprites.Items;
 import mx.itesm.sushingo.Sprites.Sam;
@@ -52,8 +58,8 @@ public class GameScreen2 extends ScreenAdapter {
     private static Integer score;
     private Label livesLabel;
     private static Label scoreLabel;
-    private Label samLabel;
-    private Label scoreL;
+    private Texture samLabel;
+    private Texture scoreL;
     private Sound hitSound;
     private Sound powerSound;
     private final AssetManager assetManager = new AssetManager();
@@ -63,9 +69,17 @@ public class GameScreen2 extends ScreenAdapter {
     private OrthographicCamera cameraHUD;
     private Viewport viewportHUD;
     private Stage stageUI;
+
+    private OrthographicCamera cameraPause;
+    private Viewport viewportPause;
+    private Stage stagePause;
+    private Texture reanu, reanuPress, menuPress, menu, reini, reiniPress;
+    private Table table2;
+
     private enum STATE {
         PLAYING, PAUSED
     }
+
     private STATE state = STATE.PLAYING;
 
     public GameScreen2(SushinGo game) {
@@ -101,7 +115,6 @@ public class GameScreen2 extends ScreenAdapter {
         hitSound = Gdx.audio.newSound(Gdx.files.internal("Audio/Hit.mp3"));
 
 
-
         Array<Texture> textures = new Array<Texture>();
         for (int i = 1; i <= 3; i++) {
             textures.add(new Texture(Gdx.files.internal("Nivel2/fondo" + i + ".png")));
@@ -110,51 +123,122 @@ public class GameScreen2 extends ScreenAdapter {
 
         BackGround parallaxBackground = new BackGround(textures, WORLD_WIDTH, WORLD_HEIGHT);
         parallaxBackground.setSize(WORLD_WIDTH, WORLD_HEIGHT);
-        parallaxBackground.setSpeed(2);
+        parallaxBackground.setSpeed(0);
         stage.addActor(parallaxBackground);
 
-        Gdx.input.setInputProcessor(stage);
+        if (state == STATE.PLAYING) {
+            parallaxBackground.setSpeed(2);
+        }
 
-        music = Gdx.audio.newMusic(Gdx.files.internal("Audio/Mo_Shio.mp3"));
+        music = Gdx.audio.newMusic(Gdx.files.internal("Audio/Pasele_Guerita.mp3"));
         music.setLooping(true);
-        music.setVolume(.3f);
+        music.setVolume(.5f);
         music.play();
 
         Table table = new Table();
         table.top();
         table.setFillParent(true);
 
+        BitmapFont bitmapFont = new BitmapFont(Gdx.files.internal("label.fnt"));
+
+        String livesString = String.format("%03d", lives);
+        String scoreString = String.format("%06d", score);
+
         livesLabel = new Label(String.format("%03d", lives), new Label.LabelStyle(new BitmapFont(), Color.BLACK));
         scoreLabel = new Label(String.format("%06d", score), new Label.LabelStyle(new BitmapFont(), Color.BLACK));
-        scoreL = new Label("SCORE", new Label.LabelStyle(new BitmapFont(), Color.BLACK));
-        samLabel = new Label("LIVES", new Label.LabelStyle(new BitmapFont(), Color.BLACK));
+        scoreL = new Texture(Gdx.files.internal("puntaje.png"));
+        samLabel = new Texture(Gdx.files.internal("vidas.png"));
+
+        Image imageScore = new Image(scoreL);
+        Image imageLives = new Image(samLabel);
 
         cameraHUD = new OrthographicCamera();
-        viewportHUD = new FitViewport(WORLD_WIDTH,WORLD_HEIGHT,cameraHUD);
+        viewportHUD = new FitViewport(WORLD_WIDTH, WORLD_HEIGHT, cameraHUD);
         cameraHUD.update();
         stageUI = new Stage(viewportHUD);
         playTRDrawable = new TextureRegionDrawable(new TextureRegion((Texture) game.getAssetManager().get("play.png")));
         pauseTRDrawable = new TextureRegionDrawable(new TextureRegion((Texture) game.getAssetManager().get("pause.png")));
-        pauseButton = new ImageButton(pauseTRDrawable,pauseTRDrawable,playTRDrawable);
-        pauseButton.setPosition(WORLD_WIDTH - pauseButton.getWidth()*1.2f, WORLD_HEIGHT - pauseButton.getHeight()*1.2f);
+        pauseButton = new ImageButton(pauseTRDrawable, pauseTRDrawable, playTRDrawable);
+        pauseButton.setPosition(WORLD_WIDTH - pauseButton.getWidth() * 1.2f, WORLD_HEIGHT - pauseButton.getHeight() * 1.2f);
+
+        //Pause
+        cameraPause = new OrthographicCamera();
+        viewportPause = new FitViewport(WORLD_WIDTH, WORLD_HEIGHT, cameraPause);
+        cameraPause.update();
+        stagePause = new Stage(viewportPause);
+        reini = new Texture(Gdx.files.internal("Botones/reiniciarsush.png"));
+        menu = new Texture(Gdx.files.internal("Botones/menusushi.png"));
+        reanu = new Texture(Gdx.files.internal("Botones/reanudarsushi.png"));
+
+        ImageButton reanudar = new ImageButton(new TextureRegionDrawable(new TextureRegion(reanu)));
+        reanudar.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if (state == STATE.PLAYING) {
+                    state = STATE.PAUSED;
+                } else {
+                    state = STATE.PLAYING;
+                }
+            }
+        });
+
+        ImageButton reiniciar = new ImageButton(new TextureRegionDrawable(new TextureRegion(reini)));
+        reiniciar.addListener(new ActorGestureListener() {
+            @Override
+            public void tap(InputEvent event, float x, float y, int count, int button) {
+                super.tap(event, x, y, count, button);
+                music.stop();
+                game.setScreen(new GameScreen(game));
+            }
+        });
+
+        ImageButton mainMenu = new ImageButton(new TextureRegionDrawable(menu));
+        mainMenu.addListener(new ActorGestureListener() {
+            @Override
+            public void tap(InputEvent event, float x, float y, int count, int button) {
+                super.tap(event, x, y, count, button);
+                music.stop();
+                game.setScreen(new MainMenu(game));
+                dispose();
+            }
+        });
+
+        table2 = new Table();
+        table2.row();
+        table2.setFillParent(true);
+        table2.add(reanudar).center().expandX().padTop(20f);
+        table2.row();
+        table2.row();
+        table2.row();
+        table2.add(reiniciar).center().expandX().padTop(20f);
+        table2.row();
+        table2.row();
+        table2.row();
+        table2.add(mainMenu).center().expandX().padTop(20f);
+        table.padBottom(80f);
+        stagePause.addActor(table2);
 
         pauseButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if(state==STATE.PLAYING){
+                if (state == STATE.PLAYING) {
                     state = STATE.PAUSED;
-                }else{
+                } else {
                     state = STATE.PLAYING;
                 }
-            };
+            }
         });
 
+        InputMultiplexer multiplexer = new InputMultiplexer();
+        multiplexer.addProcessor(stage);
+        multiplexer.addProcessor(stageUI);
+        multiplexer.addProcessor(stagePause);
+        Gdx.input.setInputProcessor(multiplexer);
+
         stageUI.addActor(pauseButton);
-        Gdx.input.setInputProcessor(stageUI);
 
-
-        table.add(samLabel).expandX().padTop(10f);
-        table.add(scoreL).expandX().padTop(10f);
+        table.add(imageScore).expandX().padTop(10f);
+        table.add(imageLives).expandX().padTop(10f);
         table.row();
         table.add(livesLabel).expandX();
         table.add(scoreLabel);
@@ -183,15 +267,9 @@ public class GameScreen2 extends ScreenAdapter {
 
     @Override
     public void render(float delta) {
-        if(state == STATE.PLAYING) {
+        if (state == STATE.PLAYING) {
             super.render(delta);
             update(delta);
-            music.play();
-            music.setLooping(true);
-            music.setVolume(.3f);
-        }
-        if(state == STATE.PAUSED){
-            music.pause();
         }
         clearScreen();
         draw();
@@ -210,6 +288,10 @@ public class GameScreen2 extends ScreenAdapter {
         batch.end();
         shapeRenderer.end();
         stageUI.draw();
+
+        if (state == STATE.PAUSED) {
+            stagePause.draw();
+        }
     }
 
     private void drawBadItems() {
@@ -219,8 +301,8 @@ public class GameScreen2 extends ScreenAdapter {
         }
     }
 
-    private void drawGoodItems(){
-        for (Items goodItem : goodItems){
+    private void drawGoodItems() {
+        for (Items goodItem : goodItems) {
             goodItem.draw(batch);
         }
     }
@@ -230,8 +312,8 @@ public class GameScreen2 extends ScreenAdapter {
         super.resize(width, height);
         viewport.update(width, height);
         viewportHUD.update(width, height);
+        viewportPause.update(width, height);
         stage.getViewport().update(width, height);
-
     }
 
     @Override
@@ -246,6 +328,8 @@ public class GameScreen2 extends ScreenAdapter {
         batch.dispose();
         powerSound.dispose();
         hitSound.dispose();
+        stageUI.dispose();
+        stagePause.dispose();
     }
 
     public void update(float delta) {
@@ -269,7 +353,7 @@ public class GameScreen2 extends ScreenAdapter {
         badItems.clear();
         goodItems.clear();
         lives = 3;
-        score=0;
+        score = 0;
         scoreLabel.setText(String.format("%06d", score));
         livesLabel.setText(String.format("%03d", lives));
     }
@@ -332,16 +416,21 @@ public class GameScreen2 extends ScreenAdapter {
         return false;
     }
 
-    public static void addScore(int value) {
-        score += value;
-        scoreLabel.setText(String.format("%06d", score));
+    public void addScore(int value) {
+        if (score == 50) {
+            music.stop();
+            game.setScreen(new WinScreen(game));
+        } else {
+            score += value;
+            scoreLabel.setText(String.format("%06d", score));
+        }
     }
 
     public void restLives(int value) {
-        if(lives <= 0){
-            restart();
-        }
-        else {
+        if (lives <= 1) {
+            music.stop();
+            game.setScreen(new GameOver(game));
+        } else {
             lives -= value;
             livesLabel.setText(String.format("%03d", lives));
         }
@@ -406,11 +495,13 @@ public class GameScreen2 extends ScreenAdapter {
         return false;
     }
 
-    private void clearScreen () {
+    private void clearScreen() {
         Gdx.gl.glClearColor(Color.BLACK.r, Color.BLACK.g, Color.BLACK.b, Color.BLACK.a);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
     }
+
     public AssetManager getAssetManager() {
         return assetManager;
     }
+
 }

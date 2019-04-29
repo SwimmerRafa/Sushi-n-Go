@@ -32,6 +32,7 @@ public class WinScreen extends ScreenAdapter {
     private Texture menuTexture;
     private Texture reiniTexture;
     private Texture avanzarTexture;
+    private Texture menuPress, avanzarPress, reiniPress;
     private Music music;
 
     public WinScreen(SushinGo game) {
@@ -51,33 +52,39 @@ public class WinScreen extends ScreenAdapter {
         stage.addActor(background);
 
         menuTexture = new Texture(Gdx.files.internal("Botones/MENCOL.png"));
-        ImageButton menu = new ImageButton(new TextureRegionDrawable(new TextureRegion(menuTexture)));
+        menuPress = new Texture(Gdx.files.internal("Botones/MENUCOL2.png"));
+        ImageButton menu = new ImageButton(new TextureRegionDrawable(new TextureRegion(menuTexture)), new TextureRegionDrawable(new TextureRegion(menuPress)), new TextureRegionDrawable(new TextureRegion(menuPress)));
         menu.addListener(new ActorGestureListener() {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 super.tap(event, x, y, count, button);
+                music.stop();
                 game.setScreen(new MainMenu(game));
                 dispose();
             }
         });
 
         avanzarTexture = new Texture(Gdx.files.internal("Botones/AVANZARCOL.png"));
-        ImageButton avanzar = new ImageButton(new TextureRegionDrawable(new TextureRegion(avanzarTexture)));
+        avanzarPress = new Texture(Gdx.files.internal("Botones/AVANZARCOL2.png"));
+        ImageButton avanzar = new ImageButton(new TextureRegionDrawable(new TextureRegion(avanzarTexture)), new TextureRegionDrawable(new TextureRegion(avanzarPress)), new TextureRegionDrawable(new TextureRegion(avanzarPress)));
         avanzar.addListener(new ActorGestureListener() {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 super.tap(event, x, y, count, button);
+                music.stop();
                 game.setScreen(new GameScreen2(game));
                 dispose();
             }
         });
 
         reiniTexture = new Texture(Gdx.files.internal("Botones/REINICOL.png"));
-        ImageButton reiniciar = new ImageButton(new TextureRegionDrawable(new TextureRegion(reiniTexture)));
+        reiniPress = new Texture(Gdx.files.internal("Botones/REINICOL3.png"));
+        ImageButton reiniciar = new ImageButton(new TextureRegionDrawable(new TextureRegion(reiniTexture)), new TextureRegionDrawable(new TextureRegion(reiniPress)), new TextureRegionDrawable(new TextureRegion(reiniPress)));
         reiniciar.addListener(new ActorGestureListener() {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 super.tap(event, x, y, count, button);
+                music.stop();
                 game.setScreen(new GameScreen(game));
                 dispose();
             }
@@ -89,14 +96,13 @@ public class WinScreen extends ScreenAdapter {
         table.row();
         table.setFillParent(true);
         table.add(avanzar).padTop(20f).right().expandX();
-        table.row();
-        table.row();
+        table.padBottom(20f);
         table.row();
         table.add(reiniciar).padTop(20f).right().expandX();
-        table.row();
-        table.row();
+        table.padBottom(20f);
         table.row();
         table.add(menu).padTop(20f).right().expandX();
+        table.padBottom(20f);
         stage.addActor(table);
 
 
