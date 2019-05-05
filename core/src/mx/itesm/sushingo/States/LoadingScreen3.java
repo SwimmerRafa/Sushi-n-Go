@@ -42,7 +42,7 @@ public class LoadingScreen3 extends ScreenAdapter {
         shapeRenderer = new ShapeRenderer();
 
 
-        game.getAssetManager().load("Personajes/pez.png", Texture.class);
+        game.getAssetManager().load("Personajes/camaron.png", Texture.class);
         //
 
         game.getAssetManager().load("play.png", Texture.class);

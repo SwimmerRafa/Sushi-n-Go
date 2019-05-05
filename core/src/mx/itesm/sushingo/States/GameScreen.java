@@ -112,6 +112,7 @@ public class GameScreen extends ScreenAdapter {
         powerSound = Gdx.audio.newSound(Gdx.files.internal("Audio/power.mp3"));
         hitSound = Gdx.audio.newSound(Gdx.files.internal("Audio/Hit.mp3"));
 
+        final InputMultiplexer multiplexer = new InputMultiplexer();
 
 
         Array<Texture> textures = new Array<Texture>();
@@ -138,11 +139,6 @@ public class GameScreen extends ScreenAdapter {
         table.top();
         table.setFillParent(true);
 
-        BitmapFont bitmapFont = new BitmapFont(Gdx.files.internal("label.fnt"));
-
-        String livesString = String.format("%03d", lives);
-        String scoreString = String.format("%06d", score);
-
         BitmapFont bitmapFont1 = new BitmapFont();
         bitmapFont1.getData().setScale(1.8f);
         livesLabel = new Label(String.format("%03d", lives), new Label.LabelStyle(bitmapFont1, Color.BLACK));
@@ -159,7 +155,7 @@ public class GameScreen extends ScreenAdapter {
         stageUI = new Stage(viewportHUD);
         playTRDrawable = new TextureRegionDrawable(new TextureRegion((Texture) game.getAssetManager().get("play.png")));
         pauseTRDrawable = new TextureRegionDrawable(new TextureRegion((Texture) game.getAssetManager().get("pause.png")));
-        pauseButton = new ImageButton(pauseTRDrawable,pauseTRDrawable,playTRDrawable);
+        pauseButton = new ImageButton(pauseTRDrawable,pauseTRDrawable);
         pauseButton.setPosition(WORLD_WIDTH - pauseButton.getWidth()*1.2f, WORLD_HEIGHT - pauseButton.getHeight()*1.2f);
 
         //Pause
@@ -179,6 +175,7 @@ public class GameScreen extends ScreenAdapter {
                     state = STATE.PAUSED;
                 }else{
                     state = STATE.PLAYING;
+                    Gdx.input.setInputProcessor(multiplexer);
                 }
             }
         });
@@ -209,11 +206,7 @@ public class GameScreen extends ScreenAdapter {
         table2.setFillParent(true);
         table2.add(reanudar).center().expandX().padTop(20f);
         table2.row();
-        table2.row();
-        table2.row();
         table2.add(reiniciar).center().expandX().padTop(20f);
-        table2.row();
-        table2.row();
         table2.row();
         table2.add(mainMenu).center().expandX().padTop(20f);
         table.padBottom(80f);
@@ -224,27 +217,26 @@ public class GameScreen extends ScreenAdapter {
             public void clicked(InputEvent event, float x, float y) {
                 if(state==STATE.PLAYING){
                     state = STATE.PAUSED;
+                    Gdx.input.setInputProcessor(stagePause);
                 }else{
                     state = STATE.PLAYING;
                 }
             }
         });
 
-        InputMultiplexer multiplexer = new InputMultiplexer();
-        multiplexer.addProcessor(stage);
-        multiplexer.addProcessor(stageUI);
-        multiplexer.addProcessor(stagePause);
-        Gdx.input.setInputProcessor(multiplexer);
-
         stageUI.addActor(pauseButton);
 
-        table.add(imageScore).expandX().padTop(10f);
         table.add(imageLives).expandX().padTop(10f);
+        table.add(imageScore).expandX().padTop(10f);
         table.row();
         table.add(livesLabel).expandX();
         table.add(scoreLabel);
 
-        stage.addActor(table);
+        stageUI.addActor(table);
+
+        multiplexer.addProcessor(stage);
+        multiplexer.addProcessor(stageUI);
+        Gdx.input.setInputProcessor(multiplexer);
     }
 
 
@@ -347,16 +339,6 @@ public class GameScreen extends ScreenAdapter {
             powerSound.play(6);
             addScore(10);
         }
-    }
-
-    private void restart() {
-        sam.setPosition(WORLD_WIDTH / 4, WORLD_HEIGHT / 2);
-        badItems.clear();
-        goodItems.clear();
-        lives = 3;
-        score=0;
-        scoreLabel.setText(String.format("%06d", score));
-        livesLabel.setText(String.format("%03d", lives));
     }
 
     private void updateBadItems(float delta) {
@@ -501,8 +483,5 @@ public class GameScreen extends ScreenAdapter {
     private void clearScreen () {
         Gdx.gl.glClearColor(Color.BLACK.r, Color.BLACK.g, Color.BLACK.b, Color.BLACK.a);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-    }
-    public AssetManager getAssetManager() {
-        return assetManager;
     }
 }

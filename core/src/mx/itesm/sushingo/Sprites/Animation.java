@@ -3,7 +3,7 @@ package mx.itesm.sushingo.Sprites;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 
-public class Animation {
+public class    Animation {
     private Array<TextureRegion> frames;
     private float maxFrameTime;
     private float currentFrameTime;

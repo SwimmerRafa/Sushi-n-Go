@@ -200,7 +200,7 @@ public class MainMenu extends ScreenAdapter {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 super.tap(event, x, y, count, button);
-                game.setScreen(new ScenariosScreen(game));
+                game.setScreen(new GameMode(game));
                 dispose();
             }
         });

@@ -44,6 +44,18 @@ public class Items {
         return Intersector.overlaps(samCollisionCircle, collisionRectangle);
     }
 
+    public boolean isCamColliding(Cam cam){
+
+        Circle samCollisionCircle = cam.getCollisionCircle();
+        return Intersector.overlaps(samCollisionCircle, collisionRectangle);
+    }
+
+    public boolean isPaulColliding(Paul paul){
+
+        Circle samCollisionCircle = paul.getCollisionCircle();
+        return Intersector.overlaps(samCollisionCircle, collisionRectangle);
+    }
+
     public void update (float delta){
         if(toDestroy && ! destroyed){
             destroyed = true;
