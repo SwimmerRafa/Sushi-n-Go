@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
@@ -28,16 +29,16 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import java.util.Random;
-import mx.itesm.sushingo.Pantallas.GameOver2;
+
+import mx.itesm.sushingo.Pantallas.GameOver;
 import mx.itesm.sushingo.Pantallas.MainMenu;
-import mx.itesm.sushingo.Pantallas.WinScreen2;
+import mx.itesm.sushingo.Pantallas.WinScreen;
 import mx.itesm.sushingo.Sprites.BackGround;
-import mx.itesm.sushingo.Sprites.Cam;
 import mx.itesm.sushingo.Sprites.Items;
-import mx.itesm.sushingo.Sprites.Paul;
+import mx.itesm.sushingo.Sprites.Sam;
 import mx.itesm.sushingo.SushinGo;
 
-public class GameScreen2 extends ScreenAdapter {
+public class Infinity1 extends ScreenAdapter {
     private static final float WORLD_WIDTH = 1280;
     private static final float WORLD_HEIGHT = 720;
     private Viewport viewport;
@@ -47,12 +48,12 @@ public class GameScreen2 extends ScreenAdapter {
     private SushinGo game;
     private Stage stage;
     private OrthographicCamera camera;
-    private Paul paul;
+    private Sam sam;
     private static final float GAP_BETWEEN_OBSTACLES = 40f;
     private float[] PADS = {0, 97, 194, 291, 388, 485, 582, 679};
     private Array<Items> badItems = new Array<Items>();
     private Array<Items> goodItems = new Array<Items>();
-    private Texture arroz, salsa, naruto, cuchillo, jalapeño;
+    private Texture arroz, salsa, naruto, cuchillo;
     private static Integer lives;
     private static Integer score;
     private Label livesLabel;
@@ -61,8 +62,10 @@ public class GameScreen2 extends ScreenAdapter {
     private Texture scoreL;
     private Sound hitSound;
     private Sound powerSound;
+    private final AssetManager assetManager = new AssetManager();
+    private TextureRegionDrawable playTRDrawable;
     private TextureRegionDrawable pauseTRDrawable;
-    private ImageButton pauseButton;
+    private ImageButton pauseButton, musicButton;
     private OrthographicCamera cameraHUD;
     private Viewport viewportHUD;
     private Stage stageUI;
@@ -70,14 +73,14 @@ public class GameScreen2 extends ScreenAdapter {
     private OrthographicCamera cameraPause;
     private Viewport viewportPause;
     private Stage stagePause;
-    private Texture reanu, menu, reini;
+    private Texture reanu, reanuPress, menuPress, menu, reini, reiniPress;
     private Table table2;
     private enum STATE {
         PLAYING, PAUSED
     }
     private STATE state = STATE.PLAYING;
 
-    public GameScreen2(SushinGo game) {
+    public Infinity1(SushinGo game) {
         lives = 3;
         score = 0;
         this.game = game;
@@ -98,14 +101,13 @@ public class GameScreen2 extends ScreenAdapter {
         shapeRenderer = new ShapeRenderer();
         batch = new SpriteBatch();
 
-        paul = new Paul();
-        paul.setPosition(WORLD_WIDTH / 4, WORLD_HEIGHT / 2);
+        sam = new Sam();
+        sam.setPosition(WORLD_WIDTH / 4, WORLD_HEIGHT / 2);
 
         arroz = new Texture(Gdx.files.internal("Items/arrozc.png"));
         naruto = new Texture(Gdx.files.internal("Items/naruto.png"));
         cuchillo = new Texture(Gdx.files.internal("Items/cuchillo.png"));
         salsa = new Texture(Gdx.files.internal("Items/salsa.png"));
-        jalapeño = new Texture(Gdx.files.internal("Items/chile2.png"));
 
         powerSound = Gdx.audio.newSound(Gdx.files.internal("Audio/power.mp3"));
         hitSound = Gdx.audio.newSound(Gdx.files.internal("Audio/Hit.mp3"));
@@ -115,7 +117,7 @@ public class GameScreen2 extends ScreenAdapter {
 
         Array<Texture> textures = new Array<Texture>();
         for (int i = 1; i <= 3; i++) {
-            textures.add(new Texture(Gdx.files.internal("Nivel2/fondo" + i + ".png")));
+            textures.add(new Texture(Gdx.files.internal("Ejemplo/fondo" + i + ".png")));
             textures.get(textures.size - 1).setWrap(Texture.TextureWrap.MirroredRepeat, Texture.TextureWrap.MirroredRepeat);
         }
 
@@ -128,7 +130,7 @@ public class GameScreen2 extends ScreenAdapter {
             parallaxBackground.setSpeed(2);
         }
 
-        music = Gdx.audio.newMusic(Gdx.files.internal("Audio/Pasele_Guerita.mp3"));
+        music = Gdx.audio.newMusic(Gdx.files.internal("Audio/Mo_Shio.mp3"));
         music.setLooping(true);
         music.setVolume(.3f);
         music.play();
@@ -151,9 +153,12 @@ public class GameScreen2 extends ScreenAdapter {
         viewportHUD = new FitViewport(WORLD_WIDTH,WORLD_HEIGHT,cameraHUD);
         cameraHUD.update();
         stageUI = new Stage(viewportHUD);
+        playTRDrawable = new TextureRegionDrawable(new TextureRegion((Texture) game.getAssetManager().get("play.png")));
         pauseTRDrawable = new TextureRegionDrawable(new TextureRegion((Texture) game.getAssetManager().get("pause.png")));
         pauseButton = new ImageButton(pauseTRDrawable,pauseTRDrawable);
         pauseButton.setPosition(WORLD_WIDTH - pauseButton.getWidth()*1.2f, WORLD_HEIGHT - pauseButton.getHeight()*1.2f);
+
+        musicButton  = new ImageButton(pauseTRDrawable,pauseTRDrawable);
 
         //Pause
         cameraPause = new OrthographicCamera();
@@ -183,7 +188,7 @@ public class GameScreen2 extends ScreenAdapter {
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 super.tap(event, x, y, count, button);
                 music.stop();
-                game.setScreen(new GameScreen2(game));
+                game.setScreen(new GameScreen(game));
             }
         });
 
@@ -238,20 +243,20 @@ public class GameScreen2 extends ScreenAdapter {
 
 
     private void updateSam(float delta) {
-        paul.update(delta);
+        sam.update(delta);
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) || Gdx.input.justTouched()) {
-            paul.jump();
+            sam.jump();
         }
         blockSamLeavingTheWorld();
     }
 
     private void blockSamLeavingTheWorld() {
         //Sam toca el piso
-        if (paul.getY() < 0) {
-            paul.setPosition(paul.getX(), 0);
+        if (sam.getY() < 0) {
+            sam.setPosition(sam.getX(), 0);
         }
-        if (paul.getY() > WORLD_HEIGHT) {
-            paul.setPosition(paul.getX(), WORLD_HEIGHT);
+        if (sam.getY() > WORLD_HEIGHT) {
+            sam.setPosition(sam.getX(), WORLD_HEIGHT);
         }
     }
 
@@ -272,7 +277,7 @@ public class GameScreen2 extends ScreenAdapter {
         batch.setTransformMatrix(camera.view);
         batch.begin();
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        paul.draw(batch);
+        sam.draw(batch);
         drawBadItems();
         drawGoodItems();
         batch.end();
@@ -310,13 +315,12 @@ public class GameScreen2 extends ScreenAdapter {
     public void dispose() {
         stage.dispose();
         music.dispose();
-        paul.dispose();
+        sam.dispose();
         arroz.dispose();
         salsa.dispose();
         cuchillo.dispose();
         naruto.dispose();
         batch.dispose();
-        jalapeño.dispose();
         powerSound.dispose();
         hitSound.dispose();
         stageUI.dispose();
@@ -388,8 +392,8 @@ public class GameScreen2 extends ScreenAdapter {
 
     private boolean checkForBadCollision() {
         for (Items obstacle : badItems) {
-            if (obstacle.isPaulColliding(paul) && (!paul.isHit())) {
-                paul.setHit(true);
+            if (obstacle.isSamColliding(sam) && (!sam.isHit())) {
+                sam.setHit(true);
                 hitSound.play();
                 badItems.removeValue(obstacle, true);
                 return true;
@@ -399,20 +403,15 @@ public class GameScreen2 extends ScreenAdapter {
     }
 
     public void addScore(int value) {
-        if (score == 200){
-            music.stop();
-            game.setScreen(new WinScreen2(game));
-        }
-        else {
-            score += value;
-            scoreLabel.setText(String.format("%06d", score));
-        }
+        score += value;
+        scoreLabel.setText(String.format("%06d", score));
+
     }
 
     public void restLives(int value) {
         if(lives <=1){
             music.stop();
-            game.setScreen(new GameOver2(game));
+            game.setScreen(new GameOver(game));
         }
         else {
             lives -= value;
@@ -431,7 +430,7 @@ public class GameScreen2 extends ScreenAdapter {
     private void createNewGoodItem() {
         Random rnd = new Random();
         int RandomPad = rnd.nextInt(8);
-        int RandomTexture = rnd.nextInt(4);
+        int RandomTexture = rnd.nextInt(3);
         Items newObstacle;
 
         if (RandomTexture == 1) {
@@ -445,14 +444,7 @@ public class GameScreen2 extends ScreenAdapter {
             float y = PADS[RandomPad];
             newObstacle.setPosition(WORLD_WIDTH + Items.WIDTH, y + newObstacle.WIDTH / 2);
             goodItems.add(newObstacle);
-
-        } else if (RandomTexture == 3) {
-            newObstacle = new Items(jalapeño);
-            float y = PADS[RandomPad];
-            newObstacle.setPosition(WORLD_WIDTH + Items.WIDTH, y + newObstacle.WIDTH / 2);
-            goodItems.add(newObstacle);
         }
-
     }
 
     private void checkIfNewGoodItemNeeded() {
@@ -477,8 +469,8 @@ public class GameScreen2 extends ScreenAdapter {
 
     private boolean checkForGoodCollision() {
         for (Items obstacle : goodItems) {
-            if (obstacle.isPaulColliding(paul) && (!paul.isHit())) {
-                paul.setHit(true);
+            if (obstacle.isSamColliding(sam) && (!sam.isHit())) {
+                sam.setHit(true);
                 powerSound.play();
                 goodItems.removeValue(obstacle, true);
                 return true;

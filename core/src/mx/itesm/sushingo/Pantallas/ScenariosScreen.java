@@ -19,6 +19,9 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 import mx.itesm.sushingo.States.GameScreen;
 import mx.itesm.sushingo.States.GameScreen2;
+import mx.itesm.sushingo.States.InfinityLoading;
+import mx.itesm.sushingo.States.InfinityLoading2;
+import mx.itesm.sushingo.States.InfinityLoading3;
 import mx.itesm.sushingo.States.LoadingScreen;
 import mx.itesm.sushingo.States.LoadingScreen2;
 import mx.itesm.sushingo.States.LoadingScreen3;
@@ -70,7 +73,7 @@ public class ScenariosScreen extends ScreenAdapter {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 super.tap(event, x, y, count, button);
-                game.setScreen(new LoadingScreen(game));
+                game.setScreen(new InfinityLoading(game));
                 dispose();
             }
         });
@@ -85,7 +88,7 @@ public class ScenariosScreen extends ScreenAdapter {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 super.tap(event, x, y, count, button);
-                game.setScreen(new LoadingScreen2(game));
+                game.setScreen(new InfinityLoading2(game));
                 dispose();
             }
         });
@@ -100,7 +103,7 @@ public class ScenariosScreen extends ScreenAdapter {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 super.tap(event, x, y, count, button);
-                game.setScreen(new LoadingScreen3(game));
+                game.setScreen(new InfinityLoading3(game));
                 dispose();
             }
         });
@@ -133,7 +136,7 @@ public class ScenariosScreen extends ScreenAdapter {
 
         stage.addActor(table);
 
-        music = Gdx.audio.newMusic(Gdx.files.internal("Audio/Menu.mp3"));
+        music = Gdx.audio.newMusic(Gdx.files.internal("Audio/Menu01.mp3"));
         music.setLooping(true);
         music.setVolume(.3f);
         music.play();

@@ -47,7 +47,7 @@ public class GameOver3 extends ScreenAdapter {
         stage = new Stage(new StretchViewport(WORLD_WIDTH, WORLD_HEIGHT));
         Gdx.input.setInputProcessor(stage);
 
-        backgroundTexture =new Texture(Gdx.files.internal("Fondos/LOSER3.png"));
+        backgroundTexture =new Texture(Gdx.files.internal("Fondos/LOSER2.png"));
         Image background = new Image(backgroundTexture);
         stage.addActor(background);
 

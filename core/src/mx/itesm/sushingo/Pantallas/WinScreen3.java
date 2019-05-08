@@ -18,10 +18,10 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 import mx.itesm.sushingo.States.GameScreen;
-import mx.itesm.sushingo.States.GameScreen2;
+import mx.itesm.sushingo.States.GameScreen3;
 import mx.itesm.sushingo.SushinGo;
 
-public class GameOver2 extends ScreenAdapter {
+public class WinScreen3 extends ScreenAdapter {
     private final SushinGo game;
     private static final float WORLD_WIDTH = 1280;
     private static final float WORLD_HEIGHT = 720;
@@ -32,10 +32,10 @@ public class GameOver2 extends ScreenAdapter {
     private Texture menuTexture;
     private Texture menuPressed;
     private Texture reiniTexture;
-    private Texture reiniPressed;
+    private Texture reiniPressed, avanzarTexture, avanzarPress;
     private Music music;
 
-    public GameOver2(SushinGo game) {
+    public WinScreen3(SushinGo game) {
         this.game = game;
     }
 
@@ -47,13 +47,27 @@ public class GameOver2 extends ScreenAdapter {
         stage = new Stage(new StretchViewport(WORLD_WIDTH, WORLD_HEIGHT));
         Gdx.input.setInputProcessor(stage);
 
-        backgroundTexture =new Texture(Gdx.files.internal("Fondos/LOSER3.png"));
+        backgroundTexture =new Texture(Gdx.files.internal("Fondos/win4.png"));
         Image background = new Image(backgroundTexture);
         stage.addActor(background);
 
-        menuTexture = new Texture(Gdx.files.internal("MENU1.png"));
-        ImageButton  menu = new ImageButton(new TextureRegionDrawable(new TextureRegion(menuTexture)));
+        menuTexture = new Texture(Gdx.files.internal("Botones/libree.png"));
+        menuPressed = new Texture(Gdx.files.internal("Botones/libree2.png"));
+        ImageButton  menu = new ImageButton(new TextureRegionDrawable(new TextureRegion(menuTexture)), new TextureRegionDrawable(new TextureRegion(menuPressed)));
+
         menu.addListener(new ActorGestureListener() {
+            @Override
+            public void tap(InputEvent event, float x, float y, int count, int button) {
+                super.tap(event, x, y, count, button);
+                game.setScreen(new ScenariosScreen(game));
+                dispose();
+            }
+        });
+
+        reiniTexture = new Texture(Gdx.files.internal("Botones/VOLVER.png"));
+        reiniPressed = new Texture(Gdx.files.internal("Botones/VOLVEROS.png"));
+        ImageButton  reiniciar = new ImageButton(new TextureRegionDrawable(new TextureRegion(reiniTexture)), new TextureRegionDrawable(new TextureRegion(reiniPressed)));
+        reiniciar.addListener(new ActorGestureListener() {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 super.tap(event, x, y, count, button);
@@ -62,13 +76,15 @@ public class GameOver2 extends ScreenAdapter {
             }
         });
 
-        reiniTexture = new Texture(Gdx.files.internal("REINICIAR1.png"));
-        ImageButton  reiniciar = new ImageButton(new TextureRegionDrawable(new TextureRegion(reiniTexture)));
-        reiniciar.addListener(new ActorGestureListener() {
+        avanzarTexture = new Texture(Gdx.files.internal("Botones/REINICOL.png"));
+        avanzarPress = new Texture(Gdx.files.internal("Botones/REINICOL3.png"));
+        ImageButton avanzar = new ImageButton(new TextureRegionDrawable(new TextureRegion(avanzarTexture)), new TextureRegionDrawable(new TextureRegion(avanzarPress)), new TextureRegionDrawable(new TextureRegion(avanzarPress)));
+        avanzar.addListener(new ActorGestureListener() {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 super.tap(event, x, y, count, button);
-                game.setScreen(new GameScreen2(game));
+                music.stop();
+                game.setScreen(new GameScreen3(game));
                 dispose();
             }
         });
@@ -81,13 +97,15 @@ public class GameOver2 extends ScreenAdapter {
         table.add(reiniciar).padTop(20f).right().expandX();
         table.row();
         table.add(menu).padTop(20f).right().expandX();
+        table.row();
+        table.add(avanzar).padTop(20f).right().expandX();
         table.padBottom(80f);
 
         stage.addActor(table);
 
 
 
-        music = Gdx.audio.newMusic(Gdx.files.internal("Audio/Menu01.mp3"));
+        music = Gdx.audio.newMusic(Gdx.files.internal("Audio/Story.mp3"));
         music.setLooping(true);
         music.setVolume(.3f);
         music.play();

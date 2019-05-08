@@ -37,7 +37,7 @@ import mx.itesm.sushingo.Sprites.Items;
 import mx.itesm.sushingo.Sprites.Paul;
 import mx.itesm.sushingo.SushinGo;
 
-public class GameScreen2 extends ScreenAdapter {
+public class Infinity2 extends ScreenAdapter {
     private static final float WORLD_WIDTH = 1280;
     private static final float WORLD_HEIGHT = 720;
     private Viewport viewport;
@@ -77,7 +77,7 @@ public class GameScreen2 extends ScreenAdapter {
     }
     private STATE state = STATE.PLAYING;
 
-    public GameScreen2(SushinGo game) {
+    public Infinity2(SushinGo game) {
         lives = 3;
         score = 0;
         this.game = game;
@@ -399,14 +399,9 @@ public class GameScreen2 extends ScreenAdapter {
     }
 
     public void addScore(int value) {
-        if (score == 200){
-            music.stop();
-            game.setScreen(new WinScreen2(game));
-        }
-        else {
-            score += value;
-            scoreLabel.setText(String.format("%06d", score));
-        }
+        score += value;
+        scoreLabel.setText(String.format("%06d", score));
+
     }
 
     public void restLives(int value) {

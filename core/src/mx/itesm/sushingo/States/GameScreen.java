@@ -65,7 +65,7 @@ public class GameScreen extends ScreenAdapter {
     private final AssetManager assetManager = new AssetManager();
     private TextureRegionDrawable playTRDrawable;
     private TextureRegionDrawable pauseTRDrawable;
-    private ImageButton pauseButton;
+    private ImageButton pauseButton, musicButton;
     private OrthographicCamera cameraHUD;
     private Viewport viewportHUD;
     private Stage stageUI;
@@ -158,6 +158,8 @@ public class GameScreen extends ScreenAdapter {
         pauseButton = new ImageButton(pauseTRDrawable,pauseTRDrawable);
         pauseButton.setPosition(WORLD_WIDTH - pauseButton.getWidth()*1.2f, WORLD_HEIGHT - pauseButton.getHeight()*1.2f);
 
+        musicButton  = new ImageButton(pauseTRDrawable,pauseTRDrawable);
+
         //Pause
         cameraPause = new OrthographicCamera();
         viewportPause = new FitViewport(WORLD_WIDTH, WORLD_HEIGHT, cameraPause);
@@ -242,7 +244,7 @@ public class GameScreen extends ScreenAdapter {
 
     private void updateSam(float delta) {
         sam.update(delta);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) || Gdx.input.isTouched()) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) || Gdx.input.justTouched()) {
             sam.jump();
         }
         blockSamLeavingTheWorld();
@@ -332,11 +334,11 @@ public class GameScreen extends ScreenAdapter {
         updateGoodItems(delta);
 
         if (checkForBadCollision()) {
-            hitSound.play(6);
+            hitSound.play(8);
             restLives(1);
         }
         if (checkForGoodCollision()) {
-            powerSound.play(6);
+            powerSound.play(8);
             addScore(10);
         }
     }
@@ -392,6 +394,7 @@ public class GameScreen extends ScreenAdapter {
         for (Items obstacle : badItems) {
             if (obstacle.isSamColliding(sam) && (!sam.isHit())) {
                 sam.setHit(true);
+                hitSound.play();
                 badItems.removeValue(obstacle, true);
                 return true;
             }
@@ -400,7 +403,7 @@ public class GameScreen extends ScreenAdapter {
     }
 
     public void addScore(int value) {
-        if (score == 50){
+        if (score == 100){
             music.stop();
             game.setScreen(new WinScreen(game));
         }
@@ -473,6 +476,7 @@ public class GameScreen extends ScreenAdapter {
         for (Items obstacle : goodItems) {
             if (obstacle.isSamColliding(sam) && (!sam.isHit())) {
                 sam.setHit(true);
+                powerSound.play();
                 goodItems.removeValue(obstacle, true);
                 return true;
             }

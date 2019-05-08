@@ -15,7 +15,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import mx.itesm.sushingo.SushinGo;
 
-public class LoadingScreen extends ScreenAdapter {
+public class InfinityLoading extends ScreenAdapter {
     private static final float WORLD_WIDTH = 1280;
     private static final float WORLD_HEIGHT = 720;
     private static final float PROGRESS_BAR_WIDTH = 500;
@@ -26,7 +26,7 @@ public class LoadingScreen extends ScreenAdapter {
     private float progress = 0;
     private final SushinGo game;
 
-    public LoadingScreen(SushinGo game) {
+    public InfinityLoading(SushinGo game) {
         this.game = game;
     }
 
@@ -74,7 +74,7 @@ public class LoadingScreen extends ScreenAdapter {
 
     private void update() {
         if (game.getAssetManager().update()) {
-            game.setScreen(new GameScreen(game));
+            game.setScreen(new Infinity1(game));
         } else {
             progress = game.getAssetManager().getProgress();
         }
@@ -95,5 +95,3 @@ public class LoadingScreen extends ScreenAdapter {
         shapeRenderer.end();
     }
 }
-
-

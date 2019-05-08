@@ -63,7 +63,7 @@ public class Cam {
     public void jump() {
         ySpeed = FLY_ACCEL;
         setPosition(x, y + ySpeed);
-        flap.play(0.8f);
+        flap.play(0.5f);
     }
 
     public void dispose() {

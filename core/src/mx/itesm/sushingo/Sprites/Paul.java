@@ -34,7 +34,7 @@ public class Paul {
         texture = new Texture(Gdx.files.internal("Personajes/pulpo.png"));
         birdAnimation = new Animation(new TextureRegion(texture), 3, 0.5f);
         bounds = new Rectangle(x, y, texture.getWidth() / 3, texture.getHeight());
-        flap = Gdx.audio.newSound(Gdx.files.internal("Audio/cam.mp3"));
+        flap = Gdx.audio.newSound(Gdx.files.internal("Audio/paul.mp3"));
         colliding = false;
         collisionCircle = new Circle(x, y, COLLISION_RADIUS);
     }
@@ -60,7 +60,7 @@ public class Paul {
     public void jump() {
         ySpeed = FLY_ACCEL;
         setPosition(x, y + ySpeed);
-        flap.play(0.8f);
+        flap.play(0.5f);
     }
 
     public void dispose() {

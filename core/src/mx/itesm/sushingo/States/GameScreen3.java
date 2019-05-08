@@ -32,6 +32,7 @@ import java.util.Random;
 import mx.itesm.sushingo.Pantallas.GameOver3;
 import mx.itesm.sushingo.Pantallas.MainMenu;
 import mx.itesm.sushingo.Pantallas.WinScreen;
+import mx.itesm.sushingo.Pantallas.WinScreen3;
 import mx.itesm.sushingo.Sprites.BackGround;
 import mx.itesm.sushingo.Sprites.Cam;
 import mx.itesm.sushingo.Sprites.Items;
@@ -240,7 +241,7 @@ public class GameScreen3 extends ScreenAdapter {
 
     private void updateSam(float delta) {
         cam.update(delta);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) || Gdx.input.isTouched()) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) || Gdx.input.justTouched()) {
             cam.jump();
         }
         blockSamLeavingTheWorld();
@@ -316,6 +317,7 @@ public class GameScreen3 extends ScreenAdapter {
         salsa.dispose();
         cuchillo.dispose();
         naruto.dispose();
+        katana.dispose();
         batch.dispose();
         powerSound.dispose();
         hitSound.dispose();
@@ -352,6 +354,7 @@ public class GameScreen3 extends ScreenAdapter {
         int RandomPad = rnd.nextInt(8);
         int RandomTexture = rnd.nextInt(4);
         Items newObstacle;
+
         if (RandomTexture == 1) {
             newObstacle = new Items(salsa);
             float y = PADS[RandomPad];
@@ -359,14 +362,16 @@ public class GameScreen3 extends ScreenAdapter {
             badItems.add(newObstacle);
 
         } else if (RandomTexture == 2) {
+            newObstacle = new Items(katana);
+            float y = PADS[RandomPad];
+            newObstacle.setPosition(WORLD_WIDTH + Items.WIDTH, y + newObstacle.WIDTH / 2);
+            badItems.add(newObstacle);
+
+        } else if (RandomTexture == 3) {
             newObstacle = new Items(cuchillo);
             float y = PADS[RandomPad];
             newObstacle.setPosition(WORLD_WIDTH + Items.WIDTH, y + newObstacle.WIDTH / 2);
             badItems.add(newObstacle);
-        } else if (RandomTexture == 2) {
-            newObstacle = new Items(katana);
-            float y = PADS[RandomPad];
-            newObstacle.setPosition(WORLD_WIDTH + Items.WIDTH, y + newObstacle.WIDTH / 2);
         }
     }
 
@@ -395,6 +400,7 @@ public class GameScreen3 extends ScreenAdapter {
         for (Items obstacle : badItems) {
             if (obstacle.isCamColliding(cam) && (!cam.isHit())) {
                 cam.setHit(true);
+                hitSound.play();
                 badItems.removeValue(obstacle, true);
                 return true;
             }
@@ -403,9 +409,9 @@ public class GameScreen3 extends ScreenAdapter {
     }
 
     public void addScore(int value) {
-        if (score == 50) {
+        if (score == 400) {
             music.stop();
-            game.setScreen(new WinScreen(game));
+            game.setScreen(new WinScreen3(game));
         } else {
             score += value;
             scoreLabel.setText(String.format("%06d", score));
@@ -432,7 +438,7 @@ public class GameScreen3 extends ScreenAdapter {
 
     private void createNewGoodItem() {
         Random rnd = new Random();
-        int RandomPad = rnd.nextInt(8);
+        int RandomPad = rnd.nextInt(7);
         int RandomTexture = rnd.nextInt(3);
         Items newObstacle;
 
@@ -474,6 +480,7 @@ public class GameScreen3 extends ScreenAdapter {
         for (Items obstacle : goodItems) {
             if (obstacle.isCamColliding(cam) && (!cam.isHit())) {
                 cam.setHit(true);
+                powerSound.play();
                 goodItems.removeValue(obstacle, true);
                 return true;
             }

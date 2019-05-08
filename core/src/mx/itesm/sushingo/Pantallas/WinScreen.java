@@ -106,7 +106,7 @@ public class WinScreen extends ScreenAdapter {
         stage.addActor(table);
 
 
-        music = Gdx.audio.newMusic(Gdx.files.internal("Audio/Menu01.mp3"));
+        music = Gdx.audio.newMusic(Gdx.files.internal("Audio/Story.mp3"));
         music.setLooping(true);
         music.setVolume(.3f);
         music.play();

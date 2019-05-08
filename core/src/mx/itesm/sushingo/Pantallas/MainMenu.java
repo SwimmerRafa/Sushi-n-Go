@@ -205,8 +205,8 @@ public class MainMenu extends ScreenAdapter {
             }
         });
 
-        charactersTexture = new Texture(Gdx.files.internal("Botones/Personajes.png"));
-        charactersPressed = new Texture(Gdx.files.internal("Botones/PerLuz.png"));
+        charactersTexture = new Texture(Gdx.files.internal("Botones/historia1.png"));
+        charactersPressed = new Texture(Gdx.files.internal("Botones/historia2.png"));
 
         ImageButton characters = new ImageButton(new TextureRegionDrawable(new TextureRegion(charactersTexture)), new TextureRegionDrawable(new TextureRegion(charactersPressed)));
 

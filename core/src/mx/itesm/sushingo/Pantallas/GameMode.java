@@ -33,7 +33,7 @@ public class GameMode extends ScreenAdapter {
     private Texture modoLibre;
     private Texture modoHistoria;
     private Texture modoLibrePress;
-    private Texture modoHistoriaPress;
+    private Texture modoHistoriaPress, menuTexture, menuPressed;
     private Music music;
 
     public GameMode(SushinGo game) {
@@ -53,7 +53,7 @@ public class GameMode extends ScreenAdapter {
         stage.addActor(background);
 
         modoHistoria = new Texture(Gdx.files.internal("Botones/modohistoria.png"));
-        modoHistoriaPress = new Texture(Gdx.files.internal("Botones/modohistoria.png"));
+        modoHistoriaPress = new Texture(Gdx.files.internal("Botones/modohistse.png"));
         ImageButton historia = new ImageButton(new TextureRegionDrawable(new TextureRegion(modoHistoria)), new TextureRegionDrawable(new TextureRegion(modoHistoriaPress)), new TextureRegionDrawable(new TextureRegion(modoHistoriaPress)));
         historia.addListener(new ActorGestureListener() {
             @Override
@@ -66,7 +66,7 @@ public class GameMode extends ScreenAdapter {
         });
 
         modoLibre = new Texture(Gdx.files.internal("Botones/modolibre.png"));
-        modoLibrePress = new Texture(Gdx.files.internal("Botones/modolibre.png"));
+        modoLibrePress = new Texture(Gdx.files.internal("Botones/modolibrse.png"));
         ImageButton libre = new ImageButton(new TextureRegionDrawable(new TextureRegion(modoLibre)), new TextureRegionDrawable(new TextureRegion(modoLibrePress)), new TextureRegionDrawable(new TextureRegion(modoLibrePress)));
         libre.addListener(new ActorGestureListener() {
             @Override
@@ -78,18 +78,32 @@ public class GameMode extends ScreenAdapter {
             }
         });
 
+        menuTexture = new Texture(Gdx.files.internal("Botones/menuBotonNormal.png"));
+        menuPressed = new Texture(Gdx.files.internal("Botones/menuBoton.png"));
+        ImageButton menu = new ImageButton(new TextureRegionDrawable(new TextureRegion(menuTexture)), new TextureRegionDrawable(new TextureRegion(menuPressed)));
+        menu.addListener(new ActorGestureListener() {
+            @Override
+            public void tap(InputEvent event, float x, float y, int count, int button) {
+                super.tap(event, x, y, count, button);
+                game.setScreen(new MainMenu(game));
+                dispose();
+            }
+        });
+
 
         table = new Table();
 
         table.row();
         table.setFillParent(true);
+        table.add(menu).colspan(10).expand().right();
+        table.row();
         table.add(historia).expandX();
         table.add(libre).expandX();
-        table.padBottom(-50f);
+        table.padBottom(80f);
         stage.addActor(table);
 
 
-        music = Gdx.audio.newMusic(Gdx.files.internal("Audio/Menu01.mp3"));
+        music = Gdx.audio.newMusic(Gdx.files.internal("Audio/Story.mp3"));
         music.setLooping(true);
         music.setVolume(.3f);
         music.play();

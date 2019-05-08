@@ -44,7 +44,6 @@ public class LoadingScreen3 extends ScreenAdapter {
 
         game.getAssetManager().load("Personajes/camaron.png", Texture.class);
         //
-
         game.getAssetManager().load("play.png", Texture.class);
         game.getAssetManager().load("pause.png", Texture.class);
 
