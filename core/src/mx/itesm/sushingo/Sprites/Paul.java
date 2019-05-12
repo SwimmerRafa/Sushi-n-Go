@@ -26,7 +26,7 @@ public class Paul {
     private static final float DIVE_ACCEL = 0.30F;
     private static final float FLY_ACCEL = 5F;
 
-    private float hitTimer = 1;
+    private float hitTimer = 1f;
     private boolean isHit = false;
 
     public Paul() {

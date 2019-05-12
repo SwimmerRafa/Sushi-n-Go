@@ -38,7 +38,7 @@ public class TransitionScreen extends ScreenAdapter {
         Gdx.input.setInputProcessor(stage);
 
         backgroundTexture = new Texture(Gdx.files.internal("tec.png"));
-        logoTexture = new Texture(Gdx.files.internal("logo1.png"));
+        logoTexture = new Texture(Gdx.files.internal("logo2.png"));
 
         Image background = new Image(backgroundTexture);
         Image logo = new Image(logoTexture);

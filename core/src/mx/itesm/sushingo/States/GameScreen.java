@@ -403,7 +403,7 @@ public class GameScreen extends ScreenAdapter {
     }
 
     public void addScore(int value) {
-        if (score == 100){
+        if (score == 250){
             music.stop();
             game.setScreen(new WinScreen(game));
         }
