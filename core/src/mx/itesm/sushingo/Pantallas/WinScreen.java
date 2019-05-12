@@ -19,6 +19,7 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 import mx.itesm.sushingo.States.GameScreen;
 import mx.itesm.sushingo.States.GameScreen2;
+import mx.itesm.sushingo.States.LoadingScreen;
 import mx.itesm.sushingo.SushinGo;
 
 public class WinScreen extends ScreenAdapter {
@@ -72,7 +73,7 @@ public class WinScreen extends ScreenAdapter {
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 super.tap(event, x, y, count, button);
                 music.stop();
-                game.setScreen(new GameScreen2(game));
+                game.setScreen(new StoryGame2(game));
                 dispose();
             }
         });
@@ -85,7 +86,7 @@ public class WinScreen extends ScreenAdapter {
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 super.tap(event, x, y, count, button);
                 music.stop();
-                game.setScreen(new GameScreen(game));
+                game.setScreen(new LoadingScreen(game));
                 dispose();
             }
         });

@@ -76,8 +76,8 @@ public class WinScreen3 extends ScreenAdapter {
             }
         });
 
-        avanzarTexture = new Texture(Gdx.files.internal("Botones/REINICOL.png"));
-        avanzarPress = new Texture(Gdx.files.internal("Botones/REINICOL3.png"));
+        avanzarTexture = new Texture(Gdx.files.internal("Botones/REINICOL5.png"));
+        avanzarPress = new Texture(Gdx.files.internal("Botones/REINICOL4.png"));
         ImageButton avanzar = new ImageButton(new TextureRegionDrawable(new TextureRegion(avanzarTexture)), new TextureRegionDrawable(new TextureRegion(avanzarPress)), new TextureRegionDrawable(new TextureRegion(avanzarPress)));
         avanzar.addListener(new ActorGestureListener() {
             @Override

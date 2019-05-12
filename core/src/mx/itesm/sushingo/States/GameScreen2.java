@@ -28,6 +28,8 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import java.util.Random;
+
+import mx.itesm.sushingo.Pantallas.End2;
 import mx.itesm.sushingo.Pantallas.GameOver2;
 import mx.itesm.sushingo.Pantallas.MainMenu;
 import mx.itesm.sushingo.Pantallas.WinScreen2;
@@ -399,9 +401,9 @@ public class GameScreen2 extends ScreenAdapter {
     }
 
     public void addScore(int value) {
-        if (score == 200){
+        if (score == 1000){
             music.stop();
-            game.setScreen(new WinScreen2(game));
+            game.setScreen(new End2(game));
         }
         else {
             score += value;

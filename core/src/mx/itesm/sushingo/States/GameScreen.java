@@ -30,8 +30,10 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import java.util.Random;
 
+import mx.itesm.sushingo.Pantallas.End1;
 import mx.itesm.sushingo.Pantallas.GameOver;
 import mx.itesm.sushingo.Pantallas.MainMenu;
+import mx.itesm.sushingo.Pantallas.StoryGame2;
 import mx.itesm.sushingo.Pantallas.WinScreen;
 import mx.itesm.sushingo.Sprites.BackGround;
 import mx.itesm.sushingo.Sprites.Items;
@@ -403,9 +405,9 @@ public class GameScreen extends ScreenAdapter {
     }
 
     public void addScore(int value) {
-        if (score == 250){
+        if (score == 500){
             music.stop();
-            game.setScreen(new WinScreen(game));
+            game.setScreen(new End1(game));
         }
         else {
             score += value;

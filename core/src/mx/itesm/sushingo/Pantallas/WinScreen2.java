@@ -73,7 +73,7 @@ public class WinScreen2 extends ScreenAdapter {
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 super.tap(event, x, y, count, button);
                 music.stop();
-                game.setScreen(new GameScreen3(game));
+                game.setScreen(new StoryGame3(game));
                 dispose();
             }
         });
